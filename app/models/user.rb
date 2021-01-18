@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   belongs_to(:prefecture)
 
+  has_one_attached(:image)
+
   EMAIL_REGEXP = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
   PASSWORD_REGEXP = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+/
   validates(:email, presence: true, uniqueness: true,
@@ -14,6 +16,7 @@ class User < ApplicationRecord
   validates(:address, presence: true, length: { maximum: 50 })
   validates(:prefecture_id, presence: true,
     numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 47, only_interger: true })
+  validates(:image, file_present: true, content_type: true, file_size: true)
 
   has_secure_password
 

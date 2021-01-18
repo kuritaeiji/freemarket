@@ -1,0 +1,9 @@
+ja:
+  activerecord:
+    models:
+      user: 'ユーザー'
+    attributes:
+      email: 'メールアドレス'
+  attributes:
+    created_at: '作成日時'
+    updated_at: '更新日時'

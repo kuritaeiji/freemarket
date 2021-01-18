@@ -20,6 +20,7 @@ module Freemarket
     config.generators do |g|
       g.javascripts false
       g.test_framework false
+      g.assets false
     end
 
     # Settings in config/environments/* take precedence over those specified here.

@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2021_01_18_001034) do
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "email"
     t.string "password_digest"
-    t.string "nickname"
+    t.string "account_name"
     t.string "family_name"
     t.string "first_name"
     t.integer "postal_code"
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 2021_01_18_001034) do
     t.boolean "activated"
     t.string "activation_digest"
     t.string "reset_digest"
-    t.string "session_id"
+    t.string "session_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_users_on_email", unique: true

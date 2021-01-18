@@ -1,0 +1,61 @@
+<%= provide(:title, '新規登録') %>
+<h1 class="text-center mt-3">新規登録</h1>
+
+<div class="row d-flex justify-content-center">
+  <div class="col-md-6">
+    <%= form_with(model: @user, local: true) do |f| %>
+      <%= render('shared/error_messages', model: @user) %>
+
+      <div class="form-group">
+        <%= f.label(:email) %>
+        <%= f.email_field(:email, class: 'form-control') %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label(:password, 'パスワード（大文字、小文字、数字を含み8文字以上）') %>
+        <%= f.password_field(:password, class: 'form-control') %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label(:password_confirmation) %>
+        <%= f.password_field(:password_confirmation, class: 'form-control') %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label(:account_name) %>
+        <%= f.text_field(:account_name, class: 'form-control') %>
+      </div>
+
+      <div class="row">
+        <div class="col-6 form-group">
+          <%= f.label(:family_name) %>
+          <%= f.text_field(:family_name, class: 'form-control') %>
+        </div>
+
+        <div class="col-6 form-group">
+          <%= f.label(:first_name) %>
+          <%= f.text_field(:first_name, class: 'form-control') %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label(:postal_code, '郵便番号（ハイフン無し）') %>
+        <%= f.text_field(:postal_code, class: 'form-control') %>
+      </div>
+
+      <div class="row no-gutters">
+        <div class="form-group col-md-3 no-gutters">
+          <%= f.label(:prefecture_id) %>
+          <%= f.collection_select(:prefecture_id, @prefectures, :id, :name, class: 'form-control') %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label(:address) %>
+        <%= f.text_field(:address, class: 'form-control') %>
+      </div>
+
+      <%= f.submit('登録', class: 'btn btn-primary w-100') %>
+    <% end %>
+  </div>
+</div>

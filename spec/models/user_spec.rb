@@ -1,4 +1,5 @@
 require 'rails_helper'
+include(SessionsHelper)
 
 RSpec.describe User, type: :model do
   it { is_expected.to belong_to(:prefecture) }
@@ -45,9 +46,9 @@ RSpec.describe User, type: :model do
   it { is_expected.to validate_presence_of(:address) }
   it { is_expected.to validate_length_of(:address).is_at_most(50) }
 
-  it { is_expected.to validate_presence_of(:prefecture_id) }
-  it { is_expected.to validate_numericality_of(:prefecture_id).is_greater_than_or_equal_to(1) }
-  it { is_expected.to validate_numericality_of(:prefecture_id).is_less_than_or_equal_to(47) }
+  # it { is_expected.to validate_presence_of(:prefecture_id) }
+  # it { is_expected.to validate_numericality_of(:prefecture_id).is_greater_than_or_equal_to(1) }
+  # it { is_expected.to validate_numericality_of(:prefecture_id).is_less_than_or_equal_to(47) }
 
   it { is_expected.to have_secure_password }
 
@@ -56,5 +57,16 @@ RSpec.describe User, type: :model do
     user2 = create(:user)
     user3 = create(:user)
     expect(User.all).to eq([user1, user2, user3])
+  end
+
+  it('authenticate?メソッド') do
+    user = build(:user)
+    session_id = new_token
+    invalid_token = new_token
+    user.session_digest = to_digest(session_id)
+    aggregate_failures do
+      expect(user.authenticate?(session_id)).to eq(true)
+      expect(user.authenticate?(invalid_token)).to eq(false)
+    end
   end
 end

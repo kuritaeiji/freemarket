@@ -3,7 +3,13 @@
     <%= link_to('フリーマーケット', root_path, { class: 'navbar-brand' }) %>
     <nav>
       <ul class="nav navbar-nav navbar-right">
-        <li class="nav-item"><%= link_to('マイページ', '#', { class: 'nav-link' }) %></li>
+        <% if logged_in? %>
+          <li class="nav-item"><%= link_to('マイページ', '#', class: 'nav-link') %></li>
+          <li class="nav-item"><%= link_to('ログアウト', log_out_path, method: :delete, class: 'nav-link') %></li>
+        <% else %>
+          <li class="nav-item"><%= link_to('新規登録', new_user_path, class: 'nav-link') %></li>
+          <li class="nav-item"><%= link_to('ログイン', log_in_path, class: 'nav-link') %></li>
+        <% end %>
       </ul>
     </nav>
   </div>

@@ -4,7 +4,7 @@ RSpec.describe User, type: :model do
   it { is_expected.to belong_to(:prefecture) }
 
   it { is_expected.to validate_presence_of(:email) }
-  it { is_expected.to validate_uniqueness_of(:email) }
+  it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
   it { is_expected.to validate_length_of(:email).is_at_most(50) }
   it('メールアドレスは正しいフォーマット') do
     email = 'ffff.com'
@@ -32,6 +32,15 @@ RSpec.describe User, type: :model do
   it { is_expected.to validate_length_of(:first_name).is_at_most(20) }
 
   it { is_expected.to validate_presence_of(:postal_code) }
+  it('郵便番号は七桁の数値文字列') do
+    user = build(:user, postal_code: '123-4567')
+    user.valid?
+    expect(user.errors[:postal_code][0]).to eq('は不正な値です')
+
+    user2 = build(:user, postal_code: '123-456789')
+    user.valid?
+    expect(user.errors[:postal_code][0]).to eq('は不正な値です')
+  end
 
   it { is_expected.to validate_presence_of(:address) }
   it { is_expected.to validate_length_of(:address).is_at_most(50) }

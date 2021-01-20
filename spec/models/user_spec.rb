@@ -14,7 +14,7 @@ RSpec.describe User, type: :model do
   end
 
   it { is_expected.to validate_presence_of(:password) }
-  it { is_expected.to validate_length_of(:password).is_at_most(20) }
+  it { is_expected.to validate_length_of(:password).is_at_least(8).is_at_most(20) }
   it('パスワードは大文字、小文字、数字全て含む') do
     password = 'password1010'
     user = build(:user, password: password, password_confirmation: password)
@@ -78,5 +78,23 @@ RSpec.describe User, type: :model do
     allow(UserMailer).to receive_message_chain(:send_account_activation_mail, :deliver_now)
     user = create(:user)
     expect(UserMailer).to have_received(:send_account_activation_mail).with(user.reload)
+  end
+
+  context('create_reset_token_and_digest') do
+    let(:user) { create(:user) }
+    it('tokenを作成し、インスタンス変数に代入する') do
+      user.create_reset_token_and_digest
+      expect(user.reset_token).to be_truthy
+    end
+
+    it('reset_digestを更新') do
+      user.create_reset_token_and_digest
+      expect(user.reload.reset_digest).to be_truthy
+    end
+
+    it('reset_tokenとdigestが一致') do
+      user.create_reset_token_and_digest
+      expect(user.authenticate?(user.reset_token, :reset_digest)).to eq(true)
+    end
   end
 end

@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   include(SessionsHelper)
-  attr_accessor(:activation_token)
+  attr_accessor(:activation_token, :reset_token)
 
   belongs_to(:prefecture)
 
@@ -11,8 +11,8 @@ class User < ApplicationRecord
   POSTAL_CODE_REGEXP = /\A[0-9]{7}\z/
   validates(:email, presence: true, uniqueness: { case_sensitive: false },
     length: { maximum: 50 }, format: { with: EMAIL_REGEXP })
-  validates(:password, presence: true, length: { minumum: 8, maximum: 20 },
-    format: { with: PASSWORD_REGEXP }, unless: ->(user) { user.password.nil? })
+  validates(:password, presence: true, length: { in: 8..20 },
+    format: { with: PASSWORD_REGEXP })
   validates(:account_name, presence: true, length: { maximum: 20 })
   validates(:family_name, presence: true, length: { maximum: 20 })
   validates(:first_name, presence: true, length: { maximum: 20 })
@@ -32,6 +32,12 @@ class User < ApplicationRecord
     BCrypt::Password.new(send(digest_symbol)) == token
   end
 
+  def create_reset_token_and_digest
+    self.reset_token = new_token
+    self.reset_digest = to_digest(reset_token)
+    save
+  end
+
   private
     def prepare_account_activation
       create_account_activation_token_and_digest
@@ -41,6 +47,6 @@ class User < ApplicationRecord
     def create_account_activation_token_and_digest
       self.activation_token = new_token
       self.activation_digest = to_digest(activation_token)
-      save!
+      save
     end
 end

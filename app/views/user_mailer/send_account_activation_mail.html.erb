@@ -1,0 +1,4 @@
+<h1>アカウント有効化</h1>
+
+<%= link_to('アカウント有効化', account_activate_url(
+  params: { activation_token: @user.activation_token, user_id: @user.id })) %>

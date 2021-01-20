@@ -17,6 +17,7 @@ FactoryBot.define do
     end
 
     trait(:invalid_params) do
+      email { nil }
     end
   end
 end

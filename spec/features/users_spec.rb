@@ -1,4 +1,5 @@
 require 'rails_helper'
+include(ActiveJob::TestHelper)
 
 RSpec.feature "Users", type: :feature do
   let(:user) { build(:user) }
@@ -24,6 +25,12 @@ RSpec.feature "Users", type: :feature do
 
     expect(current_path).to eq(root_path)
     expect(page).to have_selector('.alert.alert-success', text: 'メールを確認してアカウントを有効化してください。')
+
+    mail = ActionMailer::Base.deliveries.last
+    aggregate_failures do
+      expect(mail.to).to eq([user.email])
+      expect(mail.subject).to eq('アカウント有効化')
+    end
   end
 
   scenario('無効なパラメーターを入力するとエラーメッセージが表示される') do

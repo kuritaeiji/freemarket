@@ -1,6 +1,6 @@
 <% unless model.errors.messages.empty? %>
   <div class="alert alert-danger">
-    <h4><%= model.errors.messages.length %>個のエラーがあります。</h4>
+    <h4><%= model.errors.full_messages.length %>個のエラーがあります。</h4>
     <ul>
       <% model.errors.full_messages.each do |message| %>
         <li><%= message %></li>

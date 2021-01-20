@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+  include(SessionsHelper)
+  attr_accessor(:activation_token)
+
   belongs_to(:prefecture)
 
   has_one_attached(:image)
@@ -23,7 +26,21 @@ class User < ApplicationRecord
 
   default_scope(-> { order(id: :asc ) })
 
-  def authenticate?(token)
-    BCrypt::Password.new(session_digest) == token
+  after_create_commit(:prepare_account_activation)
+
+  def authenticate?(token, digest_symbol)
+    BCrypt::Password.new(send(digest_symbol)) == token
   end
+
+  private
+    def prepare_account_activation
+      create_account_activation_token_and_digest
+      UserMailer.send_account_activation_mail(self).deliver_now
+    end
+
+    def create_account_activation_token_and_digest
+      self.activation_token = new_token
+      self.activation_digest = to_digest(activation_token)
+      save!
+    end
 end

@@ -5,7 +5,6 @@ RSpec.describe User, type: :model do
   it { is_expected.to belong_to(:prefecture) }
 
   it { is_expected.to validate_presence_of(:email) }
-  it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
   it { is_expected.to validate_length_of(:email).is_at_most(50) }
   it('メールアドレスは正しいフォーマット') do
     email = 'ffff.com'
@@ -59,14 +58,25 @@ RSpec.describe User, type: :model do
     expect(User.all).to eq([user1, user2, user3])
   end
 
-  it('authenticate?メソッド') do
+  it('authenticate?(token, digest_string)メソッド') do
     user = build(:user)
     session_id = new_token
     invalid_token = new_token
     user.session_digest = to_digest(session_id)
     aggregate_failures do
-      expect(user.authenticate?(session_id)).to eq(true)
-      expect(user.authenticate?(invalid_token)).to eq(false)
+      expect(user.authenticate?(session_id, :session_digest)).to eq(true)
+      expect(user.authenticate?(invalid_token, :session_digest)).to eq(false)
     end
+  end
+
+  it('ユーザー作成後にactivation_tokenとdigestを作成') do
+    user = create(:user)
+    expect(user.reload.authenticate?(user.activation_token, :activation_digest)).to eq(true)
+  end
+
+  it('ユーザー作成後にアカウント有効化メールを送信') do
+    allow(UserMailer).to receive_message_chain(:send_account_activation_mail, :deliver_now)
+    user = create(:user)
+    expect(UserMailer).to have_received(:send_account_activation_mail).with(user.reload)
   end
 end

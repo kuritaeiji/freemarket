@@ -5,7 +5,7 @@ module SessionsHelper
   end
 
   def logged_in?
-    !!(current_user && current_user.authenticate?(cookies[:session_id]))
+    !!(current_user && current_user.authenticate?(cookies[:session_id], :session_digest))
   end
 
   def current_user

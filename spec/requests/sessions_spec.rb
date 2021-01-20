@@ -42,7 +42,7 @@ RSpec.describe "Sessions", type: :request do
       it('クッキーが生成されている') do
         post('/log_in', params: valid_params)
         expect(response.cookies['user_id'].present?).to eq(true)
-        expect(user.reload.authenticate?(response.cookies['session_id'])).to eq(true)
+        expect(user.reload.authenticate?(response.cookies['session_id'], :session_digest)).to eq(true)
       end
     end
   end

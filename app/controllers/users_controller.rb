@@ -10,7 +10,6 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      # ログイン処理
       flash[:success] = 'メールを確認してアカウントを有効化してください。'
       redirect_to(root_path)
     else

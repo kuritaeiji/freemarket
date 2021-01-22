@@ -12,7 +12,7 @@ class User < ApplicationRecord
   validates(:email, presence: true, uniqueness: { case_sensitive: false },
     length: { maximum: 50 }, format: { with: EMAIL_REGEXP })
   validates(:password, presence: true, length: { in: 8..20 },
-    format: { with: PASSWORD_REGEXP })
+    format: { with: PASSWORD_REGEXP }, allow_nil: true)
   validates(:account_name, presence: true, length: { maximum: 20 })
   validates(:family_name, presence: true, length: { maximum: 20 })
   validates(:first_name, presence: true, length: { maximum: 20 })
@@ -26,7 +26,7 @@ class User < ApplicationRecord
 
   default_scope(-> { order(id: :asc ) })
 
-  after_create_commit(:prepare_account_activation)
+  after_create_commit(:prepare_account_activation, if: ->(user) { user.uid.nil? })
 
   def authenticate?(token, digest_symbol)
     BCrypt::Password.new(send(digest_symbol)) == token

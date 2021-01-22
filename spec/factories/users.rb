@@ -19,5 +19,9 @@ FactoryBot.define do
     trait(:invalid_params) do
       email { nil }
     end
+
+    trait(:with_uid) do
+      uid { '12345' }
+    end
   end
 end

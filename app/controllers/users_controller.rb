@@ -1,8 +1,9 @@
-require('open-uri')
 class UsersController < ApplicationController
   before_action(:oauth_user, only: [:oauth])
+  before_action(:log_in_user, only: [:show, :edit, :update, :destroy, :edit_address, :update_address])
 
   def show
+    @user = User.find(params[:id])
   end
 
   def new
@@ -30,10 +31,10 @@ class UsersController < ApplicationController
   def destroy
   end
 
-  def address_edit
+  def edit_address
   end
 
-  def address_update
+  def update_address
   end
 
   def oauth

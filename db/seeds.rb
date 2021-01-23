@@ -1,8 +1,8 @@
-require("csv")
+# require("csv")
 
-CSV.foreach('db/prefectures.csv') do |row|
-  Prefecture.create!(name: row[1])
-end
+# CSV.foreach('db/prefectures.csv') do |row|
+#   Prefecture.create!(name: row[1])
+# end
 
 include(ActionDispatch::TestProcess)
 

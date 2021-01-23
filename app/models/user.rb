@@ -3,6 +3,7 @@ class User < ApplicationRecord
   attr_accessor(:activation_token, :reset_token)
 
   belongs_to(:prefecture)
+  has_many(:products)
 
   has_one_attached(:image)
 

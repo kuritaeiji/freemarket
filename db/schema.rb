@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_21_063824) do
+ActiveRecord::Schema.define(version: 2021_01_23_033345) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -33,7 +33,43 @@ ActiveRecord::Schema.define(version: 2021_01_21_063824) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "prefectures", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "products", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "price"
+    t.boolean "trading", default: false
+    t.boolean "solded", default: false
+    t.bigint "user_id"
+    t.bigint "shipping_day_id"
+    t.bigint "status_id"
+    t.bigint "category_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["category_id"], name: "index_products_on_category_id"
+    t.index ["shipping_day_id"], name: "index_products_on_shipping_day_id"
+    t.index ["status_id"], name: "index_products_on_status_id"
+    t.index ["user_id"], name: "index_products_on_user_id"
+  end
+
+  create_table "shipping_days", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "days"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "statuses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -61,5 +97,9 @@ ActiveRecord::Schema.define(version: 2021_01_21_063824) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "products", "categories"
+  add_foreign_key "products", "shipping_days"
+  add_foreign_key "products", "statuses"
+  add_foreign_key "products", "users"
   add_foreign_key "users", "prefectures"
 end

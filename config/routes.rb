@@ -9,8 +9,8 @@ Rails.application.routes.draw do
 
   resources(:users, only: [:show, :new, :create, :edit, :update, :destroy]) do
     member do
-      get(:address_edit)
-      put(:address_update)
+      get(:edit_address)
+      put(:update_address)
     end
     collection do
       post('oauth')

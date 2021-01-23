@@ -1,6 +1,8 @@
-require('open-uri')
 class UsersController < ApplicationController
   before_action(:oauth_user, only: [:oauth])
+  before_action(:log_in_user, only: [:show, :edit, :update, :destroy, :edit_address, :update_address])
+  before_action(:set_user, only: [:show, :edit, :update, :destroy, :edit_address, :update_address])
+  before_action(:correct_user, only: [:show, :edit, :update, :destroy, :edit_address, :update_address])
 
   def show
   end
@@ -22,18 +24,37 @@ class UsersController < ApplicationController
   end
 
   def edit
+    set_referer_to_session
   end
 
   def update
+    if @user.update(update_user_params)
+      flash[:success] = 'プロフィールを更新しました。'
+      redirect_referer_or(@user)
+    else
+      render('edit')
+    end
   end
 
   def destroy
+    @user.destroy
+    flash[:success] = '退会しました。'
+    redirect_to(root_url)
   end
 
-  def address_edit
+  def edit_address
+    @prefectures = Prefecture.all
+    set_referer_to_session
   end
 
-  def address_update
+  def update_address
+    if @user.update(update_user_address_params)
+      flash[:success] = '住所を変更しました。'
+      redirect_referer_or(@user)
+    else
+      @prefectures = Prefecture.all
+      render('edit_address')
+    end
   end
 
   def oauth
@@ -55,6 +76,14 @@ class UsersController < ApplicationController
         :family_name, :first_name, :postal_code, :prefecture_id, :address, :image)
     end
 
+    def update_user_params
+      params.require(:user).permit(:account_name, :image)
+    end
+
+    def update_user_address_params
+      params.require(:user).permit(:family_name, :first_name, :postal_code, :prefecture_id, :address)
+    end
+
     def oauth_user_params
       false_password = ENV['OAUTH_FALSE_PASSWORD']
       params.require(:user).permit(:email, :password, :password_confirmation, :account_name, :family_name,
@@ -64,6 +93,17 @@ class UsersController < ApplicationController
 
     def oauth_user
       unless params[:user][:uid]
+        redirect_to(root_url)
+      end
+    end
+
+    def set_user
+      @user = User.find(params[:id])
+    end
+
+    def correct_user
+      unless @user == current_user
+        flash[:danger] = '正しいユーザーではありません。'
         redirect_to(root_url)
       end
     end

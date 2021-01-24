@@ -31,6 +31,9 @@ gem('pry-rails')
 gem('rails-i18n')
 gem('oauth2')
 gem('faker')
+gem('will_paginate')
+gem('will_paginate-bootstrap4')
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -38,6 +41,7 @@ group :development, :test do
   gem('rspec-rails')
   gem('shoulda-matchers')
   gem('factory_bot_rails')
+  gem('database_cleaner')
 end
 
 group :development do
@@ -56,7 +60,6 @@ group :test do
   gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'webdrivers'
-  gem 'launchy'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

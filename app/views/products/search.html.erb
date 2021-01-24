@@ -1,0 +1,5 @@
+<%= provide(:title, @keywords) %>
+<h1><%= @keywords %>の検索結果</h1>
+
+<%= render(@products) %>
+<%= will_paginate(@products, renderer: WillPaginate::ActionView::BootstrapLinkRenderer) %>

@@ -17,4 +17,9 @@ Rails.application.routes.draw do
     end
   end
   resources(:password_resets, only: [:new, :create, :edit, :update])
+  resources(:products) do
+    collection do
+      get(:search)
+    end
+  end
 end

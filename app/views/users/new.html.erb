@@ -12,7 +12,7 @@
     <% end %>
 
 
-    <%= form_with(model: @user, local: true) do |f| %>
+    <%= form_with(model: @user, local: true, class: 'user-form') do |f| %>
       <%= render('shared/error_messages', model: @user) %>
 
       <div class="form-group">
@@ -57,7 +57,7 @@
           <%= f.label(:postal_code, '郵便番号（ハイフン無し）') %>
           <div class="input-group">
             <%= f.text_field(:postal_code, class: 'form-control', 'v-model' => 'user.postalCode' ) %>
-            <div class="input-group-append">
+            <div class="input-group-append postal-code-search">
               <button class="btn btn-secondary" @click.prevent="onClick()">検索</button>
             </div>
           </div>

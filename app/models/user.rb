@@ -20,7 +20,7 @@ class User < ApplicationRecord
   validates(:postal_code, presence: true, format: { with: POSTAL_CODE_REGEXP })
   validates(:address, presence: true, length: { maximum: 50 })
   validates(:prefecture_id, presence: true,
-    numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 47, only_interger: true }, unless: -> { Rails.env.test? })
+    numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 47, only_interger: true })
   validates(:image, file_present: true, content_type: true, file_size: true)
 
   has_secure_password

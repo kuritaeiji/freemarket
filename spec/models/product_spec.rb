@@ -6,22 +6,28 @@ RSpec.describe Product, type: :model do
   it { is_expected.to belong_to(:status) }
   it { is_expected.to belong_to(:category) }
 
-  describe('order_by_option(option)') do
-    let(:category) { create(:category) }
-    let(:status) { create(:status) }
-    let(:shipping_day) { create(:shipping_day) }
-    let!(:products) { create_list(:product, 5, category: category, status: status, shipping_day: shipping_day) }
+  it { is_expected.to validate_presence_of(:name) }
+  it { is_expected.to validate_length_of(:name).is_at_most(50) }
+  it { is_expected.to validate_presence_of(:description) }
+  it { is_expected.to validate_length_of(:description).is_at_most(300) }
 
-    it('価格の安い順') do
-      expect(Product.all.order_by_option('1')).to eq(Product.all.order(price: :asc))
+  describe('商品画像のバリデーション') do
+    it('画像が存在しない時バリデーションエラー') do
+      product = build(:product, images: [])
+      product.valid?
+      expect(product.errors[:images]).to include('を添付して下さい')
     end
 
-    it('価格の高い順') do
-      expect(Product.all.order_by_option('2')).to eq(Product.all.order(price: :desc))
+    it('画像以外が添付されている時バリデーションエラー') do
+      product = build(:product, images: [fixture_file_upload("#{Rails.root}/spec/models/user_spec.rb")])
+      product.valid?
+      expect(product.errors[:images]).to include('には画像を添付して下さい')
     end
 
-    it('順番を選択しない時新しい順') do
-      expect(Product.all.order_by_option('')).to eq(Product.all.order(created_at: :desc))
+    it('2MBより大きいファイルの時バリデーションエラー') do
+      product = build(:product, images: [fixture_file_upload("#{Rails.root}/spec/images/false_image.dmg")])
+      product.valid?
+      expect(product.errors[:images]).to include('は2MB以内')
     end
   end
 

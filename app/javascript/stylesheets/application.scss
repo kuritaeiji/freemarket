@@ -9,3 +9,22 @@ body {
   a:link { color : #000000; }
   a:visited { color : #000000; }
 }
+
+.images-height {
+  height: 100px;
+}
+
+.images-background {
+  background-color: rgb(245, 245, 245);
+}
+
+.auto-image {
+  max-width: 100%;
+  max-height: 100%;
+  text-align: center;
+}
+
+.user-image {
+  width: 100px;
+  height: 100px;
+}

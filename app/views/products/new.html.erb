@@ -1,0 +1,77 @@
+<%= javascript_pack_tag('product_images') %>
+
+<%= provide(:title, '出品する') %>
+<h1 class="text-center mt-3">出品する</h1>
+
+<div class="row d-flex justify-content-center">
+  <div class="col-md-6">
+    <%= form_with(model: @product, local: true, class: 'new-product-form') do |f| %>
+      <%= render('shared/error_messages', model: @product) %>
+      <div id="new-product-images">
+      <p>商品画像（4枚まで）</p>
+        <div class="row images-height mb-3">
+          <div class="col-3 h-100" v-show="!show_images[0]">
+            <%= f.label(:image1, '&nbsp;'.html_safe, class: 'h-100 w-100 images-background') %>
+            <%= f.file_field(:image1, ref: "image1" , class: 'd-none', accept: 'image/*', 'v-on:change' => 'onChange("image1", 0)') %>
+          </div>
+          <div class="col-3 h-100" v-show="show_images[0]">
+            <img v-bind:src="files[0]" class="w-100 h-100">
+          </div>
+
+          <div class="col-3 h-100" v-show="!show_images[1]">
+            <%= f.label(:image2,'&nbsp;'.html_safe, class: 'h-100 w-100 images-background') %>
+            <%= f.file_field(:image2, ref: 'image2', class: 'd-none', accept: 'image/*', 'v-on:change' => 'onChange("image2", 1)') %>
+          </div>
+          <div class="col-3 h-100" v-show="show_images[1]">
+            <img v-bind:src="files[1]" class="w-100 h-100">
+          </div>
+
+          <div class="col-3 h-100" v-show="!show_images[2]">
+            <%= f.label(:image3, '&nbsp;'.html_safe, class: 'h-100 w-100 images-background') %>
+            <%= f.file_field(:image3, ref: 'image3', class: 'd-none', accept: 'image/*', 'v-on:change' => 'onChange("image3", 2)') %>
+          </div>
+          <div class="col-3 h-100" v-show="show_images[2]">
+            <img v-bind:src="files[2]" class="w-100 h-100">
+          </div>
+
+          <div class="col-3 h-100" v-show="!show_images[3]">
+            <%= f.label(:image4, '&nbsp;'.html_safe, class: 'h-100 w-100 images-background') %>
+            <%= f.file_field(:image4, ref: 'image4', class: 'd-none', accept: 'image/*', 'v-on:change' => 'onChange("image4", 3)') %>
+          </div>
+          <div class="col-3 h-100" v-show="show_images[3]">
+            <img v-bind:src="files[3]" class="w-100 h-100">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label(:name) %>
+        <%= f.text_field(:name, class: 'form-control') %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label(:description) %>
+        <%= f.text_area(:description, class: 'form-control', rows: 10) %>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 form-group">
+          <%= f.label(:category_id) %>
+          <%= f.collection_select(:category_id, Category.all, :id, :name, {}, class: 'form-control') %>
+        </div>
+
+        <div class="col-md-4 form-group">
+          <%= f.label(:status_id) %>
+          <%= f.collection_select(:status_id, Status.all, :id, :name, {}, class: 'form-control') %>
+        </div>
+
+        <div class="col-md-4 form-group">
+          <%= f.label(:shipping_day_id) %>
+          <%= f.select(:shipping_day_id, ShippingDay.all.map { |d| [d.days + 'で発送', d.id] }, {}, class: 'form-control') %>
+        </div>
+      </div>
+    
+      <%= f.submit('出品する', class: 'btn btn-primary btn-block') %>
+    <% end %>
+  </div>
+</div>

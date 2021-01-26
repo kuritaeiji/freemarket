@@ -16,7 +16,6 @@
             <%= f.hidden_field(:category_id, 'v-bind:value' => 'product.category_id') %>
             <%= f.hidden_field(:status_ids, 'v-bind:value' => 'product.status_ids') %>
             <%= f.hidden_field(:shipping_day_ids, 'v-bind:value' => 'product.shipping_day_ids') %>
-            <%= f.hidden_field(:order_option, 'v-bind:value' => 'order_option') %>
           <% end %>
           <div class="btn btn-success ml-3 show-detail-button" v-on:click="onClick()">
             <i class="fas fa-plus-square"></i>
@@ -24,6 +23,7 @@
           </div>
           <% if logged_in? %>
             <li class="nav-item"><%= link_to('マイページ', current_user, class: 'nav-link') %></li>
+            <li class="nav-item"><%= link_to('出品する', new_product_path, class: 'nav-link')%></li>
           <% else %>
             <li class="nav-item"><%= link_to('新規登録', new_user_path, class: 'nav-link') %></li>
             <li class="nav-item"><%= link_to('ログイン', log_in_path, class: 'nav-link') %></li>
@@ -33,7 +33,7 @@
     </div>
   </div>
 
-  <div class="container mt-3" v-show="show_detail_form">
+  <div class="container mt-3" v-if="show_detail_form">
     <%= form_with(url: search_products_path, method: :get, local: true, class: 'row') do |f| %>
       <div class="col-md-4">
         <h4>カテゴリー</h4>
@@ -51,11 +51,6 @@
         <%= f.collection_check_boxes(:shipping_day_ids, ShippingDay.all, :id, :days, include_hidden: false) do |b| %>
           <%= b.label('v-on:change' => 'onShippingDayChange($event)'){ b.check_box + ' ' + b.text + 'で発送' } %>
         <% end %>
-      </div>
-      <div class="col-md-4">
-        <h4>並べ替え</h4>
-        <%= f.select(:order_option, @order_options.map { |option| [option[:name], option[:id]] }, { prompt: true },
-          class: 'form-control', 'v-on:change' => 'onOrderChange($event)') %>
       </div>
     <% end %>
   </div>

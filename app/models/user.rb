@@ -25,7 +25,7 @@ class User < ApplicationRecord
 
   has_secure_password
 
-  default_scope(-> { order(id: :asc ) })
+  default_scope(-> { with_attached_image.order(id: :asc ) })
 
   after_create_commit(:prepare_account_activation, if: ->(user) { user.uid.nil? })
 

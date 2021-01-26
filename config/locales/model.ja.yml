@@ -2,6 +2,7 @@ ja:
   activerecord:
     models:
       user: 'ユーザー'
+      product: '商品'
     attributes:
       user:
         email: 'メールアドレス'
@@ -14,6 +15,13 @@ ja:
         prefecture_id: '都道府県'
         address: '住所'
         image: 'アイコン画像'
+      product:
+        name: '商品名'
+        description: '商品説明'
+        category_id: 'カテゴリー'
+        status_id: '商品の状態'
+        shipping_day_id: '発送日時'
+        images: '商品画像'
   attributes:
     created_at: '作成日時'
     updated_at: '更新日時'

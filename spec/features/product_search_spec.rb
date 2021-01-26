@@ -18,7 +18,6 @@ RSpec.feature "ProductSearches", type: :feature do
     select('メンズ', from: 'category_id')
     check('新品、未使用')
     check('1日で発送')
-    select('価格の安い順', from: 'order_option')
     within('.input-group-append') do
       click_on('検索')
     end

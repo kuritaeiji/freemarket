@@ -3,7 +3,6 @@ class CreateProducts < ActiveRecord::Migration[6.0]
     create_table :products do |t|
       t.string(:name)
       t.text(:description)
-      t.integer(:price)
       t.boolean(:trading, default: false)
       t.boolean(:solded, default: false)
       t.references(:user, foreign_key: true)

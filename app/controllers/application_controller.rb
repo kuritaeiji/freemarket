@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery({ with: :exception })
 
+  before_action(:set_search_variables)
+
   private
     def log_in_user
       unless logged_in?
@@ -18,5 +20,10 @@ class ApplicationController < ActionController::Base
     def redirect_referer_or(url)
       redirect_to(session[:referer] || url)
       session.delete(:referer)
+    end
+
+    def set_search_variables
+      @keywords = nil
+      @order_options = [{ id: 1, name: '価格の安い順' }, { id: 2, name: '価格の高い順' }]
     end
 end

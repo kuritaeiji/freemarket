@@ -1,15 +1,57 @@
-<header class="navbar navbar-expand-md navbar-light bg-light">
-  <div class="container">
-    <%= link_to('フリーマーケット', root_path, { class: 'navbar-brand' }) %>
-    <nav>
-      <ul class="nav navbar-nav navbar-right">
-        <% if logged_in? %>
-          <li class="nav-item"><%= link_to('マイページ', current_user, class: 'nav-link') %></li>
-        <% else %>
-          <li class="nav-item"><%= link_to('新規登録', new_user_path, class: 'nav-link') %></li>
-          <li class="nav-item"><%= link_to('ログイン', log_in_path, class: 'nav-link') %></li>
+<%= javascript_pack_tag('search_form') %>
+
+<header id="header">
+  <div class="navbar navbar-expand-md navbar-light bg-light">
+    <div class="container">
+      <%= link_to('フリーマーケット', root_path, { class: 'navbar-brand' }) %>
+      <nav>
+        <ul class="nav navbar-nav navbar-right">
+          <%= form_with(url: search_products_path, scope: :product, method: :get, local: true, class: 'form-inline') do |f| %>
+            <div class="input-group">
+              <%= f.search_field(:keywords, value: @keywords, class: 'form-control', placeholder: '検索キーワード') %>
+              <div class="input-group-append">
+                <%= f.submit('検索', class: 'btn btn-primary') %>
+              </div>
+            </div>
+            <%= f.hidden_field(:category_id, 'v-bind:value' => 'product.category_id') %>
+            <%= f.hidden_field(:status_ids, 'v-bind:value' => 'product.status_ids') %>
+            <%= f.hidden_field(:shipping_day_ids, 'v-bind:value' => 'product.shipping_day_ids') %>
+          <% end %>
+          <div class="btn btn-success ml-3 show-detail-button" v-on:click="onClick()">
+            <i class="fas fa-plus-square"></i>
+            詳細検索
+          </div>
+          <% if logged_in? %>
+            <li class="nav-item"><%= link_to('マイページ', current_user, class: 'nav-link') %></li>
+            <li class="nav-item"><%= link_to('出品する', new_product_path, class: 'nav-link')%></li>
+          <% else %>
+            <li class="nav-item"><%= link_to('新規登録', new_user_path, class: 'nav-link') %></li>
+            <li class="nav-item"><%= link_to('ログイン', log_in_path, class: 'nav-link') %></li>
+          <% end %>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <div class="container mt-3" v-if="show_detail_form">
+    <%= form_with(url: search_products_path, method: :get, local: true, class: 'row') do |f| %>
+      <div class="col-md-4">
+        <h4>カテゴリー</h4>
+        <%= f.collection_select(:category_id, Category.all, :id, :name, { prompt: true },
+          class: 'form-control', 'v-on:change' => 'onCategoryChange($event)') %>
+      </div>
+      <div class="col-md-4 custom-control custom-checkbox">
+        <h4>商品の状態</h4>
+        <%= f.collection_check_boxes(:status_ids, Status.all, :id, :name, include_hidden: false) do |b| %>
+          <%= b.label('v-on:change' => 'onStatusChange($event)') { b.check_box + ' ' + b.text } %>
         <% end %>
-      </ul>
-    </nav>
+      </div>
+      <div class="col-md-4 custom-control custom-checkbox">
+        <h4>発送日時</h4>
+        <%= f.collection_check_boxes(:shipping_day_ids, ShippingDay.all, :id, :days, include_hidden: false) do |b| %>
+          <%= b.label('v-on:change' => 'onShippingDayChange($event)'){ b.check_box + ' ' + b.text + 'で発送' } %>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 </header>

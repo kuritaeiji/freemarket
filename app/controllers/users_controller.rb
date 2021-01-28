@@ -1,10 +1,11 @@
 class UsersController < ApplicationController
   before_action(:oauth_user, only: [:oauth])
-  before_action(:log_in_user, only: [:show, :edit, :update, :destroy, :edit_address, :update_address])
+  before_action(:log_in_user, only: [:edit, :update, :destroy, :edit_address, :update_address])
   before_action(:set_user, only: [:show, :edit, :update, :destroy, :edit_address, :update_address])
-  before_action(:correct_user, only: [:show, :edit, :update, :destroy, :edit_address, :update_address])
+  before_action(:correct_user, only: [:edit, :update, :destroy, :edit_address, :update_address])
 
   def show
+    @untraded_products = @user.products.where(traded: false).paginate(page: params[:page], per_page: 30)
   end
 
   def new

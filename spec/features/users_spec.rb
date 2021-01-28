@@ -18,7 +18,7 @@ RSpec.feature "Users", type: :feature do
       fill_in('郵便番号（ハイフン無し）', with: user.postal_code)
       select(prefecture.name, from: '都道府県')
       fill_in('住所', with: user.address)
-      within('form') do
+      within('.user-form') do
         click_on('登録')
       end
     }.to change(User, :count).by(1) && change(ActiveStorage::Attachment, :count).by(1)
@@ -39,7 +39,7 @@ RSpec.feature "Users", type: :feature do
     expect {
       fill_in('メールアドレス', with: user.email)
       fill_in('住所', with: user.address)
-      within('form') do
+      within('.user-form') do
         click_on('登録')
       end
     }.not_to change(User, :count)
@@ -52,7 +52,7 @@ RSpec.feature "Users", type: :feature do
     Prefecture.create(id: 13, name: '東京都')
 
     fill_in('郵便番号（ハイフン無し）', with: '1610035')
-    within('.input-group-append') do
+    within('.postal-code-search') do
       click_on('検索')
     end
 

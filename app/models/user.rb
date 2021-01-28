@@ -3,8 +3,9 @@ class User < ApplicationRecord
   attr_accessor(:activation_token, :reset_token)
 
   belongs_to(:prefecture)
+  has_many(:products)
 
-  has_one_attached(:image)
+  has_one_attached(:image, dependent: :destroy)
 
   EMAIL_REGEXP = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
   PASSWORD_REGEXP = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+/
@@ -19,12 +20,12 @@ class User < ApplicationRecord
   validates(:postal_code, presence: true, format: { with: POSTAL_CODE_REGEXP })
   validates(:address, presence: true, length: { maximum: 50 })
   validates(:prefecture_id, presence: true,
-    numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 47, only_interger: true }, unless: -> { Rails.env.test? })
+    numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 47, only_interger: true })
   validates(:image, file_present: true, content_type: true, file_size: true)
 
   has_secure_password
 
-  default_scope(-> { order(id: :asc ) })
+  default_scope(-> { with_attached_image.order(id: :asc ) })
 
   after_create_commit(:prepare_account_activation, if: ->(user) { user.uid.nil? })
 

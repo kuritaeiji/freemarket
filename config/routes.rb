@@ -17,4 +17,19 @@ Rails.application.routes.draw do
     end
   end
   resources(:password_resets, only: [:new, :create, :edit, :update])
+  resources(:products) do
+    collection do
+      get(:search)
+    end
+  end
+  namespace(:api) do
+    resources(:products, only: [:index]) do
+      collection do
+        get(:traded_index)
+      end
+      member do
+        get(:image)
+      end
+    end
+  end
 end

@@ -1,0 +1,12 @@
+<div class="col-md-<%= column_number %> searched-product mb-5">
+  <%= link_to(product) do %>
+    <div class="card searched-product-card">
+      <div class="searched-product-image">
+        <%= image_tag(product.images[0], class: 'auto-image-200-200') %>
+      </div>
+      <div calss="card-body">
+        <h5 class="card-title"><%= product.name %></h5>
+      </div>
+    </div>
+  <% end %>
+</div>

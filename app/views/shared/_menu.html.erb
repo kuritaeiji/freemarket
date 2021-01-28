@@ -1,0 +1,15 @@
+<div class="col-md-4 app-menu">
+  <table class="table table-bordered table-hover">
+    <tr><td class="p-0"><%= link_to('マイページ', current_user, class: 'nav-link') %></td></tr>
+    <tr><td class="p-0"><%= link_to('出品した商品', products_path, class: 'nav-link') %></td></tr>
+  </table>
+
+  <table class="table table-bordered table-hover">
+    <h4 class="pl-3">設定</h4>
+    <tr><td class="p-0"><%= link_to('プロフィール編集', edit_user_path(current_user), class: 'nav-link') %></td></tr>
+    <tr><td class="p-0"><%= link_to('住所変更', edit_address_user_path(current_user), class: 'nav-link') %></td></tr>
+    <tr><td class="p-0"><%= link_to('パスワード変更', new_password_reset_path, class: 'nav-link') %></td></tr>
+    <tr><td class="p-0"><%= link_to('ログアウト', log_out_path, method: :delete, class: 'nav-link') %></td></tr>
+    <tr><td class="p-0"><%= link_to('退会する', @user, method: :delete, class: 'nav-link') %></td></tr>
+  </table>
+</div>

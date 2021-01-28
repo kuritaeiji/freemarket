@@ -1,0 +1,53 @@
+<%= javascript_pack_tag('show_product') %>
+
+<%= provide(:title, "#{@product.name}の商品画面") %>
+<h2 class="text-center mb-3"><%= @product.name %></h2>
+
+<div class="row d-flex justify-content-center" id="show-product">
+  <div class="col-md-8">
+    <div class="row">
+      <div calss="col-md-6">
+        <img v-bind:src="image" data-image="<%= @product.image %>" id="product-image" class="auto-image-300-300">
+        <div class="product-show-images-small">
+          <% @product.images.each do |image| %>
+            <%= image_tag(image.variant(gravity: :center, resize:"70x70^", crop:"70x70+0+0").processed,
+              'v-on:click' => "onClick($event)", data: { index: get_image_index(@product.images, image) }) %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <table class="table table-bordered">
+          <tr>
+            <th class="show-product-table-th">出品者</th>
+            <td v-on:click="requestUserPath" data-user-id="<%= @product.user.id %>" role="link"
+              class="show-product-user-link"><%= @product.user.account_name %></td>
+          </tr>
+          <tr>
+            <th class="show-product-table-th">カテゴリー</th>
+            <td><%= @product.category.name %></td>
+          </tr>
+          <tr>
+            <th class="show-product-table-th">商品の状態</th>
+            <td><%= @product.status.name %></td>
+          </tr>
+          <tr>
+            <th class="show-product-table-th">発送元地域</th>
+            <td><%= @product.user.prefecture.name %></td>
+          </tr>
+          <tr>
+            <th class="show-product-table-th">発送日時</th>
+            <td><%= @product.shipping_day.days %>で発送</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <h5 class="my-5"><%= @product.description %></h5>
+
+    <% if current_user == @product.user && !@product.traded? %>
+      <%= link_to('商品を編集する', edit_product_path(@product), class: 'btn btn-lg btn-primary btn-block mt-5 my-3') %>
+      <%= link_to('商品を削除する', product_path(@product), method: :delete, class: 'btn btn-lg btn-danger btn-block')%>
+    <% end %>
+  </div>
+</div>

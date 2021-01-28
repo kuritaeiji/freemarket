@@ -1,10 +1,14 @@
 class ProductsController < ApplicationController
-  before_action(:log_in_user, only: [:new, :create, :edit, :update])
-  before_action(:set_product, only: [:show, :edit, :update])
-  before_action(:correct_user, only: [:edit, :update])
-  before_action(:untraded_product, only: [:edit, :update])
+  before_action(:log_in_user, only: [:new, :create, :edit, :update, :index])
+  before_action(:set_product, only: [:show, :edit, :update, :destroy])
+  before_action(:correct_user, only: [:edit, :update, :destroy])
+  before_action(:untraded_product, only: [:edit, :update, :destroy])
+
+  def index
+  end
 
   def show
+    @product.set_image_as_base64(0)
   end
 
   def new
@@ -17,7 +21,6 @@ class ProductsController < ApplicationController
       flash[:success] = '出品しました。'
       redirect_to(@product)
     else
-      binding.pry
       render('new')
     end
   end
@@ -34,9 +37,15 @@ class ProductsController < ApplicationController
     end
   end
 
+  def destroy
+    @product.destroy
+    flash[:success] = '商品を削除しました。'
+    redirect_to(root_url)
+  end
+
   def search
     @keywords = search_params[:keywords]
-    @products = Product.search(search_params).order(created_at: :desc).paginate(page: params[:page], per_page: 100)
+    @products = Product.search(search_params).order(created_at: :desc).paginate(page: params[:page], per_page: 52)
   end
 
   private
@@ -71,6 +80,3 @@ class ProductsController < ApplicationController
         .merge(images: images)
     end
 end
-
-# 出品中、取引中、売却済み、検索にわけてindexを作成
-# showを作成

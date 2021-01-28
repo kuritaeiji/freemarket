@@ -15,7 +15,7 @@
             <%= f.file_field(:image1, ref: "image1" , class: 'd-none', accept: 'image/*', 'v-on:change' => 'onChange("image1", 0)') %>
           </div>
           <div class="col-3 h-100" v-show="show_images[0]">
-            <img v-bind:src="files[0]" class="w-100 h-100">
+            <img v-bind:src="files[0]" class="auto-image-100-100">
           </div>
 
           <div class="col-3 h-100" v-show="!show_images[1]">
@@ -23,7 +23,7 @@
             <%= f.file_field(:image2, ref: 'image2', class: 'd-none', accept: 'image/*', 'v-on:change' => 'onChange("image2", 1)') %>
           </div>
           <div class="col-3 h-100" v-show="show_images[1]">
-            <img v-bind:src="files[1]" class="w-100 h-100">
+            <img v-bind:src="files[1]" class="auto-image-100-100">
           </div>
 
           <div class="col-3 h-100" v-show="!show_images[2]">
@@ -31,7 +31,7 @@
             <%= f.file_field(:image3, ref: 'image3', class: 'd-none', accept: 'image/*', 'v-on:change' => 'onChange("image3", 2)') %>
           </div>
           <div class="col-3 h-100" v-show="show_images[2]">
-            <img v-bind:src="files[2]" class="w-100 h-100">
+            <img v-bind:src="files[2]" class="auto-image-100-100">
           </div>
 
           <div class="col-3 h-100" v-show="!show_images[3]">
@@ -39,7 +39,7 @@
             <%= f.file_field(:image4, ref: 'image4', class: 'd-none', accept: 'image/*', 'v-on:change' => 'onChange("image4", 3)') %>
           </div>
           <div class="col-3 h-100" v-show="show_images[3]">
-            <img v-bind:src="files[3]" class="w-100 h-100">
+            <img v-bind:src="files[3]" class="auto-image-100-100">
           </div>
         </div>
       </div>

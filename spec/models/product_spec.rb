@@ -42,4 +42,36 @@ RSpec.describe Product, type: :model do
       expect(Product.search_by_keywords('商品1')[0]).to eq(Product.find(1))
     end
   end
+
+  describe('self.as_json(products)') do
+    let(:products) { create_list(:product, 5) }
+    it('商品情報ハッシュの入った配列を返す') do
+      products_as_json = Product.as_json(products)
+      aggregate_failures do
+        expect(products_as_json.length).to eq(5)
+        expect(products_as_json[0][:id]).to eq(products[0].id)
+        expect(products_as_json[0][:name]).to eq(products[0].name)
+        expect(products_as_json[0][:url]).to eq("/products/#{products[0].id}")
+      end
+    end
+
+    it('商品画像をbase64エンコードした文字列を持つ') do
+      products_as_json = Product.as_json(products)
+      base64_image = products[0].images.blobs[0].open do |f|
+        'data:image/png;base64,' + Base64.encode64(f.read)
+      end
+      expect(products_as_json[0][:image]).to eq(base64_image)
+    end
+  end
+
+  describe('set_image_as_base64(index)') do
+    let(:product) { create(:product) }
+    it('index番号目の商品画像をbase64エンコードした文字列をimageインスタンス変数に代入する') do
+      product.set_image_as_base64(0)
+      base64_image = product.images.blobs[0].open do |f|
+        'data:image/png;base64,' + Base64.encode64(f.read)
+      end
+      expect(product.image).to eq(base64_image)
+    end
+  end
 end

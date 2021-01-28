@@ -20,8 +20,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }).$mount('#new-product-images');
 });
-
-document.addEventListener('turbolinks:visit', () => {
-  vue.$destroy();
-  vue = {};
-})

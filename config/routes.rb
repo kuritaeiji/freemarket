@@ -22,4 +22,14 @@ Rails.application.routes.draw do
       get(:search)
     end
   end
+  namespace(:api) do
+    resources(:products, only: [:index]) do
+      collection do
+        get(:traded_index)
+      end
+      member do
+        get(:image)
+      end
+    end
+  end
 end

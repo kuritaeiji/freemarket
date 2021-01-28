@@ -3,7 +3,9 @@ class Product < ApplicationRecord
   belongs_to(:shipping_day)
   belongs_to(:status)
   belongs_to(:category)
-  has_many_attached(:images)
+  has_many_attached(:images, dependent: :destroy)
+
+  attr_accessor(:image)
 
   default_scope(-> { with_attached_images.order(id: :asc) })
   scope(:search, ->(search_params) {
@@ -12,7 +14,7 @@ class Product < ApplicationRecord
       .search_by_category(search_params[:category_id])
       .search_by_shipping_days(search_params[:status_ids])
       .search_by_shipping_days(search_params[:shipping_day_ids])
-      .where(trading: false)
+      .where(traded: false)
   })
 
   scope(:search_by_keywords, ->(keywords) {
@@ -28,4 +30,21 @@ class Product < ApplicationRecord
   validates(:name, presence: true, length: { maximum: 50 })
   validates(:description, presence: true, length: { maximum: 300 })
   validates(:images, file_present_images: true, content_type_images: true, file_size_images: true)
+
+  def self.as_json(products)
+    products.map { |p| p.as_json }
+  end
+
+  def as_json
+    base64_image = images[0].blob.open do |file|
+      'data:image/png;base64,' + Base64.encode64(file.read)
+    end
+    { id: id, name: name, image: base64_image, url: "/products/#{id}" }
+  end
+
+  def set_image_as_base64(index)
+    images.blobs[index].open do |file|
+      self.image = 'data:image/png;base64,' + Base64.encode64(file.read)
+    end
+  end
 end

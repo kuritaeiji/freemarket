@@ -1,5 +1,14 @@
 <%= provide(:title, @keywords) %>
-<h1><%= @keywords %>の検索結果</h1>
+<h1 class="text-center"><%= @keywords %>の検索結果</h1>
 
-<%= render(@products) %>
-<%= will_paginate(@products, renderer: WillPaginate::ActionView::BootstrapLinkRenderer) %>
+
+<% unless @products.empty? %>
+  <div class="row">
+    <%= render(@products, column_number: 3) %>
+  </div>
+  <div class="d-flex justify-content-center">
+    <%= will_paginate(@products, renderer: WillPaginate::ActionView::BootstrapLinkRenderer) %>
+  </div>
+<% else %>
+  <h3 class="text-center mt-5">商品が存在しません</h3>
+<% end %>

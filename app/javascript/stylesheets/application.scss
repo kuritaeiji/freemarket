@@ -5,9 +5,14 @@ body {
   font-family: "游ゴシック体", "YuGothic", "游ゴシック", "Yu Gothic", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", "Meiryo", sans-serif;
 }
 
-.app-menu {
+.app-menu.searched-product {
   a:link { color : #000000; }
   a:visited { color : #000000; }
+}
+
+.product-link {
+  background-color: rgb(245, 245, 245);
+  border-bottom: 1px solid rgb(222, 226, 230);
 }
 
 .images-height {
@@ -18,13 +23,83 @@ body {
   background-color: rgb(245, 245, 245);
 }
 
-.auto-image {
-  max-width: 100%;
-  max-height: 100%;
-  text-align: center;
+.auto-image-300-300 {
+  width: 300px;
+  height: 300px;
+  object-fit: scale-down;
+  background-color: black;
+}
+
+.auto-image-200-200 {
+  width: 200px;
+  height: 200px;
+  object-fit: scale-down;
+  background-color:  rgb(245, 245, 245);
+}
+
+.auto-image-100-100 {
+  width: 100px;
+  height: 100px;
+  object-fit: scale-down;
+  background-color:  rgb(245, 245, 245);
+}
+
+.auto-image-50-50 {
+  width: 50px;
+  height: 50px;
+  object-fit: scale-down;
+  background-color: rgb(245, 245, 245);
 }
 
 .user-image {
   width: 100px;
   height: 100px;
+}
+
+.product-image { 
+  width: 50px;
+  height: 50px;
+}
+
+.link-tabs {
+  border-bottom: 1px solid rgb(222, 226, 230);
+}
+
+.linkTab {
+  background-color: rgb(238, 238, 238);
+}
+
+.linkTabHover:hover {
+  cursor: pointer;
+}
+
+.searched-product-card {
+  width: 200px;
+}
+
+.searched-product-image {
+  height: 200px;
+}
+
+.product-show-image-large {
+  width: 200px;
+  height: 200px;
+  background-color: black;
+}
+
+.product-show-images-small {
+  width: 300px;
+  height: 70px;
+  background-color: rgb(245, 245, 245);
+  :hover {
+    cursor: pointer;
+  }
+}
+
+.show-product-table-th {
+  background-color: rgb(238, 238, 238);
+}
+
+.show-product-user-link {
+  color: #007bff;
 }

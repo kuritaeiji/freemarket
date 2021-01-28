@@ -5,7 +5,7 @@ class User < ApplicationRecord
   belongs_to(:prefecture)
   has_many(:products)
 
-  has_one_attached(:image)
+  has_one_attached(:image, dependent: :destroy)
 
   EMAIL_REGEXP = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
   PASSWORD_REGEXP = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+/

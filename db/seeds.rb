@@ -73,7 +73,8 @@ statuses.each do |status|
           user: user,
           shipping_day: shipping_day,
           status: status,
-          category: category
+          category: category,
+          images: [fixture_file_upload("#{Rails.root}/spec/images/a.jpg", 'image/jpg')]
         )
       end
     end

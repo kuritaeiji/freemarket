@@ -29,5 +29,9 @@ FactoryBot.define do
       status_id { nil }
       category_id { nil }
     end
+
+    trait(:with_multiple_images) do
+      images { [fixture_file_upload('spec/images/a.jpg', 'image/jpg'), fixture_file_upload('spec/images/m.jpg', 'image/jpg')] }
+    end
   end
 end

@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   before_action(:log_in_user, only: [:edit, :update, :destroy, :edit_address, :update_address])
   before_action(:set_user, only: [:show, :edit, :update, :destroy, :edit_address, :update_address])
   before_action(:correct_user, only: [:edit, :update, :destroy, :edit_address, :update_address])
+  before_action(:not_have_trading_products, only: [:destroy])
 
   def show
     @untraded_products = @user.products.where(traded: false).paginate(page: params[:page], per_page: 30)
@@ -105,6 +106,13 @@ class UsersController < ApplicationController
     def correct_user
       unless @user == current_user
         flash[:danger] = '正しいユーザーではありません。'
+        redirect_to(root_url)
+      end
+    end
+
+    def not_have_traded_products
+      if @user.products.where(traded: true, solded: false)
+        flash[:danger] = '取引中の商品が存在するのでアカウントを削除できません。'
         redirect_to(root_url)
       end
     end

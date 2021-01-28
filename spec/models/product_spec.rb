@@ -5,6 +5,11 @@ RSpec.describe Product, type: :model do
   it { is_expected.to belong_to(:shipping_day) }
   it { is_expected.to belong_to(:status) }
   it { is_expected.to belong_to(:category) }
+  it { is_expected.to have_many(:messages) }
+
+  it('Messageableモジュールをインクルードする') do
+    expect(Product.include?(Messageable)).to eq(true)
+  end
 
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_length_of(:name).is_at_most(50) }
@@ -36,10 +41,11 @@ RSpec.describe Product, type: :model do
     let(:status) { create(:status) }
     let(:shipping_day) { create(:shipping_day) }
     let(:user) { create(:user) }
+    let!(:product) { create(:product, name: 'テストプロダクト', category: category, status: status, shipping_day: shipping_day, user: user)}
     let!(:products) { create_list(:product, 5, category: category, status: status, shipping_day: shipping_day, user: user) }
 
     it('商品をとってくる') do
-      expect(Product.search_by_keywords('商品1')[0]).to eq(Product.find(1))
+      expect(Product.search_by_keywords('テストプロダクト')[0]).to eq(Product.find(1))
     end
   end
 

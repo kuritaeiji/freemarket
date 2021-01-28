@@ -1,4 +1,5 @@
 class Product < ApplicationRecord
+  include(Messageable)
   belongs_to(:user)
   belongs_to(:shipping_day)
   belongs_to(:status)

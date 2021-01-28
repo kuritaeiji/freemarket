@@ -4,6 +4,7 @@ class User < ApplicationRecord
 
   belongs_to(:prefecture)
   has_many(:products)
+  has_many(:messages, dependent: :destroy)
 
   has_one_attached(:image, dependent: :destroy)
 

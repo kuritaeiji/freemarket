@@ -12,4 +12,12 @@ module ApplicationHelper
   def messageable_delete_url(message)
     message_path(message.id, messageable_type: message.messageable.class.to_s, messageable_id: message.messageable.id)
   end
+
+  def notice_link
+    if current_user.receive_notices.count > 0
+
+    else
+     
+    end
+  end
 end

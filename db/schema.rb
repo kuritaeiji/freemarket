@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_28_040511) do
+ActiveRecord::Schema.define(version: 2021_01_29_230628) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -48,6 +48,19 @@ ActiveRecord::Schema.define(version: 2021_01_28_040511) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["messageable_type", "messageable_id"], name: "index_messages_on_messageable_type_and_messageable_id"
     t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
+  create_table "notices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "noticeable_type"
+    t.bigint "noticeable_id"
+    t.bigint "send_user_id"
+    t.bigint "receive_user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "read", default: false
+    t.index ["noticeable_type", "noticeable_id"], name: "index_notices_on_noticeable_type_and_noticeable_id"
+    t.index ["receive_user_id"], name: "index_notices_on_receive_user_id"
+    t.index ["send_user_id"], name: "index_notices_on_send_user_id"
   end
 
   create_table "prefectures", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -109,6 +122,8 @@ ActiveRecord::Schema.define(version: 2021_01_28_040511) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "messages", "users"
+  add_foreign_key "notices", "users", column: "receive_user_id"
+  add_foreign_key "notices", "users", column: "send_user_id"
   add_foreign_key "products", "categories"
   add_foreign_key "products", "shipping_days"
   add_foreign_key "products", "statuses"

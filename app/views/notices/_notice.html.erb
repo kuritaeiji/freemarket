@@ -1,0 +1,8 @@
+<%= link_to(notice_path(notice), class: 'notice-link') do %>
+  <div class="d-flex notice">
+    <div><%= notice_image(notice) %></div>
+    <div class="notice-body">
+      <span class="notice-span"><%= notice_body(notice) %></span>
+    </div>
+  </div>
+<% end %>

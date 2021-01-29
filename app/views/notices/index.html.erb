@@ -1,0 +1,9 @@
+<%= provide(:title, 'お知らせ') %>
+<h1 class="text-center">お知らせ</h1>
+
+<div class="row">
+  <div class="col-md-8">
+    <%= render(@notices) %>
+  </div>
+  <%= render('shared/menu') %>
+</div>

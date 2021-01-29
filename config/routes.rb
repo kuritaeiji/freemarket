@@ -27,6 +27,7 @@ Rails.application.routes.draw do
     end
   end
   resources(:messages, only: [:create, :destroy])
+  resources(:notices, only: [:index])
   namespace(:api) do
     resources(:products, only: [:index]) do
       collection do

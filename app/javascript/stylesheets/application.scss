@@ -156,6 +156,22 @@ body {
   width: 100px;
 }
 
-.message-delete-button {
-  
+.present-notice {
+  color: #FF3366;
+}
+
+.notice-link {
+  :hover {
+    background-color: rgb(238, 238, 238);
+  }
+}
+
+.notice {
+  border-bottom: solid 1px rgb(222, 226, 230);
+}
+
+.notice-body {
+  display: table-cell;
+  height: 50px;
+  vertical-align: middle;
 }

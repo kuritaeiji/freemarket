@@ -22,8 +22,22 @@
             詳細検索
           </div>
           <% if logged_in? %>
-            <li class="nav-item"><%= link_to('マイページ', current_user, class: 'nav-link') %></li>
-            <li class="nav-item"><%= link_to('出品する', new_product_path, class: 'nav-link')%></li>
+            <li class="nav-item">
+              <%= link_to(notices_path, class: "nav-link") do %>
+                <i class="far fa-bell <%= notice_class %>"></i>
+                <span class="<%= notice_class %>">お知らせ<%= notice_count %></span>
+              <% end %>
+            </li>
+            <li class="nav-item dropdown">
+              <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                <i class="fas fa-bars menu-bar"></i>
+              </a>
+
+              <ul class="dropdown-menu">
+                <li class="nav-item"><%= link_to('マイページ', current_user, class: 'nav-link') %></li>
+                <li class="nav-item"><%= link_to('出品する', new_product_path, class: 'nav-link')%></li>
+              </ul>
+            </li>
           <% else %>
             <li class="nav-item"><%= link_to('新規登録', new_user_path, class: 'nav-link') %></li>
             <li class="nav-item"><%= link_to('ログイン', log_in_path, class: 'nav-link') %></li>

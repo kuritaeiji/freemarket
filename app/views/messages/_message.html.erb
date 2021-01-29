@@ -1,0 +1,34 @@
+<% if message.user == current_user %>
+  <div class="my-message">
+    <div class="d-flex">
+      <%= link_to(message.user, class: 'message-user-link') do %>
+        <%= image_tag(message.user.image.variant(gravity: :center, resize:"50x50^", crop:"50x50+0+0").processed,
+          alt: "#{message.user.account_name}のアイコン画像") %>
+        <p class="message-user-name"><%= message.user.account_name %></p>
+      <% end %>
+      <p class="message-content"><%= message.content %></p>
+    </div>
+    <div class="d-flex flex-row-reverse">
+      <p class="m-0">
+        <%= message_date_time(message) %>
+        <%= link_to(messageable_delete_url(message), method: :delete, data: { confirm: '削除しますか？' }, class: 'message-delete-link') do %>
+          <i class="fas fa-trash-alt"></i>
+        <% end %>
+      </p>
+    </div>
+  </div>
+<% else %>
+  <div class="other-user-message">
+    <div class="d-flex">
+      <%= link_to(message.user, class: 'message-user-link') do %>
+        <%= image_tag(message.user.image.variant(gravity: :center, resize:"50x50^", crop:"50x50+0+0").processed,
+          alt: "#{message.user.account_name}のアイコン画像") %>
+        <p class="m-0"><%= message.user.account_name %></p>
+      <% end %>
+      <p class="message-content"><%= message.content %></p>
+    </div>
+    <div class="d-flex flex-row-reverse">
+      <p class="m-0"><%= message_date_time(message) %></p>
+    </div>
+  </div>
+<% end %>

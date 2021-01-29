@@ -21,7 +21,12 @@ Rails.application.routes.draw do
     collection do
       get(:search)
     end
+    member do
+      post(:messages)
+      delete(:message)
+    end
   end
+  resources(:messages, only: [:create, :destroy])
   namespace(:api) do
     resources(:products, only: [:index]) do
       collection do

@@ -1,4 +1,5 @@
 class Message < ApplicationRecord
+  include(Noticeable)
   belongs_to(:messageable, polymorphic: true)
   belongs_to(:user)
 

@@ -5,6 +5,8 @@ class User < ApplicationRecord
   belongs_to(:prefecture)
   has_many(:products, dependent: :destroy)
   has_many(:messages, dependent: :destroy)
+  has_many(:receive_notices, class_name: 'Notice' ,foreign_key: 'receive_user_id', dependent: :destroy)
+  has_many(:send_notices, class_name: 'Notice' ,foreign_key: 'send_user_id', dependent: :destroy)
 
   has_one_attached(:image, dependent: :destroy)
 

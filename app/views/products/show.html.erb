@@ -1,12 +1,13 @@
 <%= javascript_pack_tag('show_product') %>
+<%= javascript_pack_tag('message_validation') %>
 
 <%= provide(:title, "#{@product.name}の商品画面") %>
 <h2 class="text-center mb-3"><%= @product.name %></h2>
 
-<div class="row d-flex justify-content-center" id="show-product">
+<div class="row d-flex justify-content-center">
   <div class="col-md-8">
     <div class="row">
-      <div calss="col-md-6">
+      <div calss="col-md-6" id="show-product">
         <img v-bind:src="image" data-image="<%= @product.image %>" id="product-image" class="auto-image-300-300">
         <div class="product-show-images-small">
           <% @product.images.each do |image| %>
@@ -48,6 +49,20 @@
     <% if current_user == @product.user && !@product.traded? %>
       <%= link_to('商品を編集する', edit_product_path(@product), class: 'btn btn-lg btn-primary btn-block mt-5 my-3') %>
       <%= link_to('商品を削除する', product_path(@product), method: :delete, class: 'btn btn-lg btn-danger btn-block')%>
+    <% end %>
+
+    <% unless @product.messages.empty? %>
+      <div id="messages" class="mb-5">
+        <%= render(@product.messages) %>
+      </div>
+    <% end %>
+
+    <%= form_with(model: @message, url: messageable_post_url, local: true, class: 'message-form') do |f| %>
+      <h5>メッセージ（200文字以内）</h5>
+      <%= f.text_area(:content, class: 'form-control mb-3', rows: 5, 'v-on:input' => 'onInput($event)') %>
+      <p v-show="!is_longer" class="message-form-initial-empty-error-messgae"></p>
+      <p v-show="is_longer" class="message-form-error-message">200文字以内で入力して下さい。</p>
+      <%= f.submit('メッセージを送る', class: 'btn btn-primary btn-block') %>
     <% end %>
   </div>
 </div>

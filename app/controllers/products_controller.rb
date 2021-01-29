@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   before_action(:log_in_user, only: [:new, :create, :edit, :update, :index])
-  before_action(:set_product, only: [:show, :edit, :update, :destroy])
+  before_action(:set_product, only: [:edit, :update, :destroy])
   before_action(:correct_user, only: [:edit, :update, :destroy])
   before_action(:untraded_product, only: [:edit, :update, :destroy])
 
@@ -8,7 +8,9 @@ class ProductsController < ApplicationController
   end
 
   def show
+    @product = Product.preload(messages: { user: { image_attachment: :blob } }).find(params[:id])
     @product.set_image_as_base64(0)
+    @message = Message.new
   end
 
   def new

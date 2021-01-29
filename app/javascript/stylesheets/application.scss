@@ -103,3 +103,59 @@ body {
 .show-product-user-link {
   color: #007bff;
 }
+
+.message-form-error-message {
+  color: #FF3366;
+}
+
+.message-form-initial-empty-error-messgae {
+  height: 24px;
+}
+
+#messages {
+  border: solid 1px rgb(238, 238, 238);
+}
+
+.my-message {
+  background-color: #fbf0e6;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  div {
+    img {
+      border-radius: 50%;
+    }
+  }
+}
+
+.other-user-message {
+  background-color: rgb(222, 226, 230);
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  div {
+    img {
+      border-radius: 50%;
+    }
+  }
+}
+
+.message-content {
+  margin: 0px;
+  font-size: 25px;
+}
+
+.message-user-link {
+  text-align: center;
+  color: black;
+  width: 100px;
+}
+
+.message-user-name {
+  margin: 0px;
+  width: 100px;
+}
+
+.message-delete-button {
+  
+}

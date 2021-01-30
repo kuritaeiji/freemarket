@@ -4,7 +4,7 @@ class Product < ApplicationRecord
   belongs_to(:shipping_day)
   belongs_to(:status)
   belongs_to(:category)
-  has_many(:likes)
+  has_many(:likes, dependent: :destroy)
   has_many(:like_users, through: :likes, source: :user)
   has_many_attached(:images, dependent: :destroy)
 

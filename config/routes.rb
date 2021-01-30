@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   resources(:notices, only: [:index])
   namespace(:api) do
     resources(:products, only: [:index]) do
+      resources(:likes, only: [:create, :destroy])
       collection do
         get(:traded_index)
       end

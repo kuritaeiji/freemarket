@@ -4,6 +4,8 @@ class Product < ApplicationRecord
   belongs_to(:shipping_day)
   belongs_to(:status)
   belongs_to(:category)
+  has_many(:likes)
+  has_many(:like_users, through: :likes, source: :user)
   has_many_attached(:images, dependent: :destroy)
 
   attr_accessor(:image)
@@ -32,6 +34,8 @@ class Product < ApplicationRecord
   validates(:description, presence: true, length: { maximum: 300 })
   validates(:images, file_present_images: true, content_type_images: true, file_size_images: true)
 
+  after_update_commit(:destroy_likes)
+
   def self.as_json(products)
     products.map { |p| p.as_json }
   end
@@ -48,4 +52,11 @@ class Product < ApplicationRecord
       self.image = 'data:image/png;base64,' + Base64.encode64(file.read)
     end
   end
+
+  private
+    def destroy_likes
+      if saved_change_to_traded?
+        likes.destroy_all
+      end
+    end
 end

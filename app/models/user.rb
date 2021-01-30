@@ -44,6 +44,10 @@ class User < ApplicationRecord
     save
   end
 
+  def like?(product)
+    like_products.include?(product)
+  end
+
   private
     def prepare_account_activation
       create_account_activation_token_and_digest

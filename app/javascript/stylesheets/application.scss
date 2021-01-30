@@ -175,3 +175,9 @@ body {
   height: 50px;
   vertical-align: middle;
 }
+
+#like-form {
+  :hover {
+    cursor: pointer;
+  }
+}

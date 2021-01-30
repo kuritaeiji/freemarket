@@ -4,13 +4,14 @@ class Api::LikesController < ApplicationController
   before_action(:correct_destroy_user, only: [:destroy])
 
   def create
+    binding.pry
     current_user.likes.create!(product: @product)
-    render(json: { status: 'success' })
+    render(json: { status: 200 })
   end
 
   def destroy
     @like.destroy
-    render(json: { status: 'success' })
+    render(json: { status: 200 })
   end
 
   private
@@ -23,8 +24,8 @@ class Api::LikesController < ApplicationController
     end
 
     def correct_destroy_user
-      @like = Like.find(params[:id])
-      unless current_user == @like.user
+      @like = current_user.likes.find_by(product_id: params[:product_id])
+      unless @like && current_user == @like.user
         flash[:danger] = '正しいユーザーではありません。'
         redirect_to(root_url)
       end

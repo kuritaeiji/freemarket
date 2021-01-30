@@ -33,15 +33,15 @@ RSpec.describe "Api::Likes", type: :request do
         log_in_request(user)
         post(api_product_likes_path(product.id))
         json = JSON.parse(response.body)
-        expect(json['status']).to eq('success')
+        expect(json['status']).to eq(200)
       end
     end
   end
 
-  describe('DELETE /products/:product_id/likes/:id') do
+  describe('DELETE /products/:product_id/like') do
     context('ログインしていない場合') do
       it('ログイン画面にリダイレクトする') do
-        delete(api_product_like_path(1, 1))
+        delete(api_product_like_path(1))
         expect(response).to redirect_to(log_in_path)
       end
     end
@@ -52,7 +52,7 @@ RSpec.describe "Api::Likes", type: :request do
       let(:like) { create(:like, product: product) }
       it('ホーム画面にリダイレクトする') do
         log_in_request(user)
-        delete(api_product_like_path(product.id, like.id))
+        delete(api_product_like_path(product.id))
         expect(response).to redirect_to(root_path)
       end
     end
@@ -64,8 +64,15 @@ RSpec.describe "Api::Likes", type: :request do
       it('いいねを削除できる') do
         log_in_request(user)
         expect {
-          delete(api_product_like_path(product.id, like.id))
+          delete(api_product_like_path(product.id))
         }.to change(Like, :count).by(-1)
+      end
+
+      it('jsonを返す') do
+        log_in_request(user)
+        delete(api_product_like_path(product.id))
+        json = JSON.parse(response.body)
+        expect(json['status']).to eq(200)
       end
     end
   end

@@ -55,8 +55,6 @@ class Product < ApplicationRecord
 
   private
     def destroy_likes
-      if saved_change_to_traded?
-        likes.destroy_all
-      end
+      likes.destroy_all if saved_change_to_traded?
     end
 end

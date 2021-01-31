@@ -175,3 +175,25 @@ body {
   height: 50px;
   vertical-align: middle;
 }
+
+#like-form {
+  :hover {
+    cursor: pointer;
+  }
+}
+
+.like-link {
+  :hover {
+    background-color: rgb(238, 238, 238);
+  }
+}
+
+.like {
+  border-bottom: solid 1px rgb(222, 226, 230);
+}
+
+.like-body {
+  display: table-cell;
+  height: 50px;
+  vertical-align: middle;
+}

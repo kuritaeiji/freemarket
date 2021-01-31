@@ -4,6 +4,11 @@
 <div class="row">
   <div class="col-md-8">
     <%= render(@notices) %>
+    <% unless @notices.empty? %>
+      <div class="d-flex justify-content-center mt-3">
+        <%= will_paginate(@notices, renderer: WillPaginate::ActionView::BootstrapLinkRenderer) %>
+      </div>
+    <% end %>
   </div>
   <%= render('shared/menu') %>
 </div>

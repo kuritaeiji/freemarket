@@ -28,8 +28,11 @@ Rails.application.routes.draw do
   end
   resources(:messages, only: [:create, :destroy])
   resources(:notices, only: [:index])
+  resources(:likes, only: [:index])
   namespace(:api) do
     resources(:products, only: [:index]) do
+      resources(:likes, only: [:create])
+      resource(:like, only: [:destroy])
       collection do
         get(:traded_index)
       end

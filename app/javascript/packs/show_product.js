@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const product_id = location.pathname.match(/\d+/);
         axios.get(`/api/products/${product_id}/image`, { params: { index: index } })
         .then((response) => {
-          console.log(response);
           this.image = response.data.image;
         })
         .catch((error) => {

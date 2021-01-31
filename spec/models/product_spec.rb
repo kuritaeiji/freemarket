@@ -6,6 +6,8 @@ RSpec.describe Product, type: :model do
   it { is_expected.to belong_to(:status) }
   it { is_expected.to belong_to(:category) }
   it { is_expected.to have_many(:messages) }
+  it { is_expected.to have_many(:likes) }
+  it { is_expected.to have_many(:like_users).through(:likes).source(:user) }
 
   it('Messageableモジュールをインクルードする') do
     expect(Product.include?(Messageable)).to eq(true)
@@ -78,6 +80,28 @@ RSpec.describe Product, type: :model do
         'data:image/png;base64,' + Base64.encode64(f.read)
       end
       expect(product.image).to eq(base64_image)
+    end
+  end
+
+  describe('after_update_commit(:destroy_likes)') do
+    context('商品を購入してtraded: trueに更新する時') do
+      it('商品へのいいねが削除される') do
+        product = create(:product)
+        likes = create_list(:like, 2, product: product)
+        expect {
+          product.update(traded: true)
+        }.to change(product.likes, :count).by(-2)
+      end
+    end
+
+    context('他のカラムを更新するとき') do
+      it('商品へのいいねが削除されない') do
+        product = create(:product)
+        likes = create_list(:like, 2, product: product)
+        expect {
+          product.update(name: 'テスト')
+        }.not_to change(product.likes, :count)
+      end
     end
   end
 end

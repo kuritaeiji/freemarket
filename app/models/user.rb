@@ -5,8 +5,10 @@ class User < ApplicationRecord
   belongs_to(:prefecture)
   has_many(:products, dependent: :destroy)
   has_many(:messages, dependent: :destroy)
-  has_many(:receive_notices, class_name: 'Notice' ,foreign_key: 'receive_user_id', dependent: :destroy)
-  has_many(:send_notices, class_name: 'Notice' ,foreign_key: 'send_user_id', dependent: :destroy)
+  has_many(:receive_notices, class_name: 'Notice', foreign_key: 'receive_user_id', dependent: :destroy)
+  has_many(:send_notices, class_name: 'Notice', foreign_key: 'send_user_id', dependent: :destroy)
+  has_many(:likes, dependent: :destroy)
+  has_many(:like_products, through: :likes, source: :product)
 
   has_one_attached(:image, dependent: :destroy)
 
@@ -33,13 +35,19 @@ class User < ApplicationRecord
   after_create_commit(:prepare_account_activation, if: ->(user) { user.uid.nil? })
 
   def authenticate?(token, digest_symbol)
-    BCrypt::Password.new(send(digest_symbol)) == token
+    digest = send(digest_symbol)
+    return false if digest.nil?
+    BCrypt::Password.new(digest) == token
   end
 
   def create_reset_token_and_digest
     self.reset_token = new_token
     self.reset_digest = to_digest(reset_token)
     save
+  end
+
+  def like?(product)
+    like_products.include?(product)
   end
 
   private

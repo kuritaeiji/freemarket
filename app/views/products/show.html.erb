@@ -1,5 +1,6 @@
 <%= javascript_pack_tag('show_product') %>
 <%= javascript_pack_tag('message_validation') %>
+<%= javascript_pack_tag('like_form') %>
 
 <%= provide(:title, "#{@product.name}の商品画面") %>
 <h2 class="text-center mb-3"><%= @product.name %></h2>
@@ -46,7 +47,24 @@
 
     <h5 class="my-5"><%= @product.description %></h5>
 
-    <% if current_user == @product.user && !@product.traded? %>
+    <% if current_user == @product.user %>
+      <h5 id="like-badge">
+        <span class="badge badge-secondary badge-pill">
+          <i class="fa fa-heart"></i> いいね！ <%= @product.likes.count %>
+        </span>
+      </h5>
+    <% else %>
+      <form id="like-form">
+        <h5 data-already-like="<%= current_user.like?(@product) %>" data-likes-count="<%= @product.likes.count %>"
+          v-on:click="onClick(<%= @product.id %>)" id="like-badge">
+          <span v-bind:class="badge">
+            <i class="fa fa-heart"></i> いいね！ <span id="likes-count">{{ likes_count }}</span>
+          </span>
+        </h5>
+      </form>
+    <% end %>
+
+    <% if current_user == @product.user %>
       <%= link_to('商品を編集する', edit_product_path(@product), class: 'btn btn-lg btn-primary btn-block mt-5 my-3') %>
       <%= link_to('商品を削除する', product_path(@product), method: :delete, class: 'btn btn-lg btn-danger btn-block')%>
     <% end %>

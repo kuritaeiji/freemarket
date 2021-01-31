@@ -1,11 +1,6 @@
 import axios from 'axios';
 import process from 'process';
 
-export default axios.create({
-  withCredentials: true,
-  baseURL: process.env.BASE_URL
-});
-
 if (document.querySelector('meta[name="csrf-token"]')) {
   const csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
   axios.defaults.headers.common = {
@@ -13,3 +8,8 @@ if (document.querySelector('meta[name="csrf-token"]')) {
     "X-CSRF-Token": csrf_token
   }
 }
+
+export default axios.create({
+  withCredentials: true,
+  baseURL: process.env.BASE_URL
+});

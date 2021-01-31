@@ -7,6 +7,8 @@ RSpec.describe User, type: :model do
   it { is_expected.to have_many(:messages).dependent(:destroy) }
   it { is_expected.to have_many(:send_notices).class_name('Notice').with_foreign_key(:send_user_id).dependent(:destroy) }
   it { is_expected.to have_many(:receive_notices).class_name('Notice').with_foreign_key(:receive_user_id).dependent(:destroy) }
+  it { is_expected.to have_many(:likes) }
+  it { is_expected.to have_many(:like_products).through(:likes).source(:product) }
 
   it { is_expected.to validate_presence_of(:email) }
   it { is_expected.to validate_length_of(:email).is_at_most(50) }
@@ -49,9 +51,9 @@ RSpec.describe User, type: :model do
   it { is_expected.to validate_presence_of(:address) }
   it { is_expected.to validate_length_of(:address).is_at_most(50) }
 
-  # it { is_expected.to validate_presence_of(:prefecture_id) }
-  # it { is_expected.to validate_numericality_of(:prefecture_id).is_greater_than_or_equal_to(1) }
-  # it { is_expected.to validate_numericality_of(:prefecture_id).is_less_than_or_equal_to(47) }
+  it { is_expected.to validate_presence_of(:prefecture_id) }
+  it { is_expected.to validate_numericality_of(:prefecture_id).is_greater_than_or_equal_to(1) }
+  it { is_expected.to validate_numericality_of(:prefecture_id).is_less_than_or_equal_to(47) }
 
   it { is_expected.to have_secure_password }
 
@@ -84,7 +86,7 @@ RSpec.describe User, type: :model do
     expect(UserMailer).to have_received(:send_account_activation_mail).with(user.reload)
   end
 
-  context('create_reset_token_and_digest') do
+  describe('create_reset_token_and_digest') do
     let(:user) { create(:user) }
     it('tokenを作成し、インスタンス変数に代入する') do
       user.create_reset_token_and_digest
@@ -99,6 +101,22 @@ RSpec.describe User, type: :model do
     it('reset_tokenとdigestが一致') do
       user.create_reset_token_and_digest
       expect(user.authenticate?(user.reset_token, :reset_digest)).to eq(true)
+    end
+  end
+
+  describe('like?(product)') do
+    it('商品にいいねしているとtrueを返す') do
+      user = create(:user)
+      product = create(:product)
+      create(:like, user: user, product: product)
+      expect(user.like?(product)).to eq(true)
+    end
+
+    it('商品にいいねをしていないとfalseを返す') do
+      user = create(:user)
+      product = create(:product)
+      create(:like, user: user)
+      expect(user.like?(product)).to eq(false)
     end
   end
 end

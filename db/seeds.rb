@@ -47,9 +47,9 @@ user = User.create!(
       email: "test#{n}@test.com",
       password: 'Password1010',
       password_confirmation: 'Password1010',
-      account_name: 'test_account#{n}',
-      family_name: 'satou#{n}',
-      first_name: 'tarou#{n}',
+      account_name: "test_account#{n}",
+      family_name: "satou#{n}",
+      first_name: "tarou#{n}",
       postal_code: '1234567',
       prefecture_id: '13',
       address: '港区',
@@ -58,9 +58,9 @@ user = User.create!(
     )
 end
 
-statuses = Status.all
-categories = Category.all
-shipping_days = ShippingDay.all
+statuses = Status.all.take(2)
+categories = Category.all.take(2)
+shipping_days = ShippingDay.all.take(2)
 users = User.all.take(10)
 
 statuses.each do |status|
@@ -78,5 +78,14 @@ statuses.each do |status|
         )
       end
     end
+  end
+end
+
+products = Product.all.take(10)
+products.each do |product|
+  users.each do |user|
+    product.messages.create!(user: user, content: 'テストメッセージ')
+    next if user == product.user
+    user.likes.create!(product: product)
   end
 end

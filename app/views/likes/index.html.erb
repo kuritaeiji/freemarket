@@ -1,0 +1,14 @@
+<%= provide(:title, 'いいね！一覧') %>
+<h1 class="text-center mb-3">いいね！一覧</h1>
+
+<div class="row">
+  <div class="col-md-8">
+    <%= render(@likes) %>
+    <% unless @likes.empty? %>
+      <div class="d-flex justify-content-center mt-3">
+        <%= will_paginate(@likes, renderer: WillPaginate::ActionView::BootstrapLinkRenderer) %>
+      </div>
+    <% end %>
+  </div>
+  <%= render('shared/menu') %>
+</div>

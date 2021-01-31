@@ -51,9 +51,9 @@ RSpec.describe User, type: :model do
   it { is_expected.to validate_presence_of(:address) }
   it { is_expected.to validate_length_of(:address).is_at_most(50) }
 
-  # it { is_expected.to validate_presence_of(:prefecture_id) }
-  # it { is_expected.to validate_numericality_of(:prefecture_id).is_greater_than_or_equal_to(1) }
-  # it { is_expected.to validate_numericality_of(:prefecture_id).is_less_than_or_equal_to(47) }
+  it { is_expected.to validate_presence_of(:prefecture_id) }
+  it { is_expected.to validate_numericality_of(:prefecture_id).is_greater_than_or_equal_to(1) }
+  it { is_expected.to validate_numericality_of(:prefecture_id).is_less_than_or_equal_to(47) }
 
   it { is_expected.to have_secure_password }
 

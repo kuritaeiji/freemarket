@@ -3,13 +3,12 @@ class Api::LikesController < ApplicationController
   before_action(:correct_create_user, only: [:create])
   before_action(:correct_destroy_user, only: [:destroy])
 
-  def create
-    binding.pry
+  def create # POST /products/:product_id/likes
     current_user.likes.create!(product: @product)
     render(json: { status: 200 })
   end
 
-  def destroy
+  def destroy # DELETE /products/:product_id/like
     @like.destroy
     render(json: { status: 200 })
   end

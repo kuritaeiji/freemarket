@@ -35,7 +35,9 @@ class User < ApplicationRecord
   after_create_commit(:prepare_account_activation, if: ->(user) { user.uid.nil? })
 
   def authenticate?(token, digest_symbol)
-    BCrypt::Password.new(send(digest_symbol)) == token
+    digest = send(digest_symbol)
+    return false if digest.nil?
+    BCrypt::Password.new(digest) == token
   end
 
   def create_reset_token_and_digest

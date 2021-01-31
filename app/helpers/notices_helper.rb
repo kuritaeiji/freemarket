@@ -11,25 +11,28 @@ module NoticesHelper
   end
 
   def notice_image(notice)
-    if notice.noticeable_type == 'Message'
-      product = notice.noticeable.messageable
-      image_tag(product.images[0].variant(gravity: :center, resize:"50x50^", crop:"50x50+0+0").processed,
-        alt: "#{product.name}の画像")
-    end
+    product = return_product(notice)
+    image_tag(product.images[0].variant(gravity: :center, resize:"50x50^", crop:"50x50+0+0").processed,
+    alt: "#{product.name}の画像")
   end
 
   def notice_body(notice)
+    send_message_user = notice.noticeable.user
+    product = return_product(notice)
     if notice.noticeable_type == 'Message'
-      send_message_user = notice.noticeable.user
-      product = notice.noticeable.messageable
       "#{send_message_user.account_name}が#{product.name}にメッセージを送りました。"
+    else
+      "#{send_message_user.account_name}が#{product.name}にいいね！しました。"
     end
   end
 
   def notice_path(notice)
-    if notice.noticeable_type == 'Message'
-      product = notice.noticeable.messageable
-      product_path(product.id)
-    end
+    product = return_product(notice)
+    product_path(product.id)
   end
+
+  private
+    def return_product(notice)
+      notice.noticeable_type == 'Message' ? notice.noticeable.messageable : notice.noticeable.product
+    end
 end

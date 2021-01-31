@@ -1,0 +1,9 @@
+<%= link_to(like.product, class: 'like-link') do %>
+  <div class="d-flex like">
+    <div><%= image_tag(like.product.images[0].variant(gravity: :center, resize:"50x50^", crop:"50x50+0+0").processed,
+    alt: "#{like.product.name}の画像") %></div>
+    <div class="like-body">
+      <span class="like-span"><%= like.product.name %>にいいね！しました。</span>
+    </div>
+  </div>
+<% end %>

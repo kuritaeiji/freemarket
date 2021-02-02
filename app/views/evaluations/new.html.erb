@@ -1,0 +1,49 @@
+<%= provide(:title, "#{@p_p.sell_user.account_name}への評価") %>
+
+<h1 class="text-center mb-3"><%= @p_p.sell_user.account_name %>への評価</h1>
+
+<div class="row d-flex justify-content-center">
+  <div class="col-md-6">
+    <%= form_with(model: @evaluation, url: purchaced_product_evaluations_path(@p_p), local: true) do |f| %>
+      <%= render('shared/error_messages', model: @evaluation) %>
+
+      <div class="form-check score-radio my-3">
+        <%= f.radio_button(:score, 1, class: 'form-check-input') %>
+        <%= f.label(:score, class: 'form-check-radio') do %>
+          悪い
+          <span class="star">
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+            <i class="far fa-star"></i>
+          </span>
+        <% end %>
+      </div>
+
+      <div class="form-check score-radio mb-3">
+        <%= f.radio_button(:score, 2, class: 'form-check-input') %>
+        <%= f.label(:score, class: 'form-check-radio') do %>
+          普通
+          <span class="star">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+          </span>
+        <% end %>
+      </div>
+
+      <div class="form-check score-radio mb-3">
+        <%= f.radio_button(:score, 3, class: 'form-check-input') %>
+        <%= f.label(:score, class: 'form-check-radio') do %>
+          良い
+          <span class="star">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </span>
+        <% end %>
+      </div>
+
+      <%= f.submit('評価する', class: 'btn btn-danger btn-block btn-lg mb-3') %>
+    <% end %>
+  </div>
+</div>

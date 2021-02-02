@@ -22,6 +22,5 @@ RSpec.feature "LogIns", type: :feature do
       click_on('ログイン')
     end
     expect(page).to have_selector('.alert.alert-success', text: 'ログインしました。')
-    expect(page).to have_selector('a', text: 'ログアウト')
   end
 end

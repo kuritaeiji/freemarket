@@ -21,7 +21,7 @@ module NoticesHelper
     product = return_product(notice)
     if notice.noticeable_type == 'Message'
       "#{send_message_user.account_name}が#{product.name}にメッセージを送りました。"
-    else
+    elsif notice.noticeable_type == 'Like'
       "#{send_message_user.account_name}が#{product.name}にいいね！しました。"
     end
   end

@@ -6,9 +6,9 @@ RSpec.describe Product, type: :model do
   it { is_expected.to belong_to(:status) }
   it { is_expected.to belong_to(:category) }
   it { is_expected.to have_many(:messages) }
-  it { is_expected.to have_many(:likes) }
+  it { is_expected.to have_many(:likes).dependent(:destroy) }
   it { is_expected.to have_many(:like_users).through(:likes).source(:user) }
-  it { is_expected.to have_one(:purchaced_product) }
+  it { is_expected.to have_one(:purchaced_product).dependent(:destroy) }
 
   it('Messageableモジュールをインクルードする') do
     expect(Product.include?(Messageable)).to eq(true)

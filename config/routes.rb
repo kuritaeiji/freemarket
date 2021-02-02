@@ -17,6 +17,13 @@ Rails.application.routes.draw do
     end
   end
   resources(:password_resets, only: [:new, :create, :edit, :update])
+  resources(:purchaced_products, only: [:index, :show]) do
+    member do
+      put(:ship)
+      put(:receive)
+    end
+    resources(:evaluations, only: [:new, :create])
+  end
   resources(:products) do
     collection do
       get(:search)

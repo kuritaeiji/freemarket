@@ -6,7 +6,7 @@ class Product < ApplicationRecord
   belongs_to(:category)
   has_many(:likes, dependent: :destroy)
   has_many(:like_users, through: :likes, source: :user)
-  has_one(:purchaced_product)
+  has_one(:purchaced_product, dependent: :destroy)
   has_many_attached(:images, dependent: :destroy)
 
   attr_accessor(:image)

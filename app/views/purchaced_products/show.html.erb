@@ -1,0 +1,18 @@
+<%= provide(:title, "やること #{@p_p.name}") %>
+
+<h1 class="text-center mb-3"><%= @p_p.name %></h1>
+
+<div class="row d-flex justify-content-center">
+  <div class="col-md-6">
+    <%= todo_alert(@p_p) %>
+
+    <div class="p-p-messages">
+    </div>
+
+    <% if current_user == @p_p.sell_user && !@p_p.shipped? # 発送してない時発送通知ボタン %>
+      <%= link_to('発送を通知する', ship_purchaced_product_path(@p_p), method: :put, class: 'btn btn-danger btn-lg btn-block') %>
+    <% elsif current_user == @p_p.purchace_user && @p_p.shipped? && !@p_p.received # 発送されたが、受け取ってない時受け取ったボタン %>
+      <%= link_to('荷物を受け取りました', receive_purchaced_product_path(@p_p), method: :put, class: 'btn btn-danger btn-lg btn-block')%>
+    <% end %>
+  </div>
+</div>

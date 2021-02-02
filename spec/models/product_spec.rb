@@ -8,6 +8,7 @@ RSpec.describe Product, type: :model do
   it { is_expected.to have_many(:messages) }
   it { is_expected.to have_many(:likes) }
   it { is_expected.to have_many(:like_users).through(:likes).source(:user) }
+  it { is_expected.to have_one(:purchaced_product) }
 
   it('Messageableモジュールをインクルードする') do
     expect(Product.include?(Messageable)).to eq(true)

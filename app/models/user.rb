@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many(:send_notices, class_name: 'Notice', foreign_key: 'send_user_id', dependent: :destroy)
   has_many(:likes, dependent: :destroy)
   has_many(:like_products, through: :likes, source: :product)
+  has_many(:purchaced_products, foreign_key: :purchace_user_id, dependent: :destroy)
 
   has_one_attached(:image, dependent: :destroy)
 

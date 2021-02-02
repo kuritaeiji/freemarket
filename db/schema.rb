@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_30_011456) do
+ActiveRecord::Schema.define(version: 2021_02_02_011250) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -97,6 +97,17 @@ ActiveRecord::Schema.define(version: 2021_01_30_011456) do
     t.index ["user_id"], name: "index_products_on_user_id"
   end
 
+  create_table "purchaced_products", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.boolean "shipped", default: false
+    t.boolean "received", default: false
+    t.bigint "product_id"
+    t.bigint "purchace_user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["product_id"], name: "index_purchaced_products_on_product_id"
+    t.index ["purchace_user_id"], name: "index_purchaced_products_on_purchace_user_id"
+  end
+
   create_table "shipping_days", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "days"
     t.datetime "created_at", precision: 6, null: false
@@ -107,6 +118,13 @@ ActiveRecord::Schema.define(version: 2021_01_30_011456) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "todos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "purchaced_product_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["purchaced_product_id"], name: "index_todos_on_purchaced_product_id"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -140,5 +158,8 @@ ActiveRecord::Schema.define(version: 2021_01_30_011456) do
   add_foreign_key "products", "shipping_days"
   add_foreign_key "products", "statuses"
   add_foreign_key "products", "users"
+  add_foreign_key "purchaced_products", "products"
+  add_foreign_key "purchaced_products", "users", column: "purchace_user_id"
+  add_foreign_key "todos", "purchaced_products"
   add_foreign_key "users", "prefectures"
 end

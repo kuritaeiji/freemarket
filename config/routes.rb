@@ -21,10 +21,7 @@ Rails.application.routes.draw do
     collection do
       get(:search)
     end
-    member do
-      post(:messages)
-      delete(:message)
-    end
+    resources(:purchaced_products, only: [:create])
   end
   resources(:messages, only: [:create, :destroy])
   resources(:notices, only: [:index])

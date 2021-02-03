@@ -3,7 +3,10 @@
 <%= javascript_pack_tag('like_form') %>
 
 <%= provide(:title, "#{@product.name}の商品画面") %>
-<h2 class="text-center mb-3"><%= @product.name %></h2>
+<h2 class="text-center mb-3">
+  <%= @product.name %>
+  <%= trade_status(@product) %>
+</h2>
 
 <div class="row d-flex justify-content-center">
   <div class="col-md-8">

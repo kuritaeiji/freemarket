@@ -2,7 +2,7 @@ class ProductsController < ApplicationController
   before_action(:log_in_user, only: [:new, :create, :edit, :update, :index])
   before_action(:set_product, only: [:show, :edit, :update, :destroy])
   before_action(:correct_user, only: [:edit, :update, :destroy])
-  before_action(:untraded_product, only: [:show, :edit, :update, :destroy])
+  before_action(:untraded_product, only: [:edit, :update, :destroy])
 
   def index
   end

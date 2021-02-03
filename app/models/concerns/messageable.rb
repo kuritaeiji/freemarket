@@ -4,4 +4,8 @@ module Messageable
   included do
     has_many(:messages, as: :messageable, dependent: :destroy)
   end
+
+  def create_notice
+    raise(NotImplementedError.new('abstract method called :create_notice. please implement create_notice'))
+  end
 end

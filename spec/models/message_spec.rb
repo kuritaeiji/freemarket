@@ -8,7 +8,6 @@ RSpec.describe Message, type: :model do
   it { is_expected.to validate_presence_of(:content) }
   it { is_expected.to validate_length_of(:content).is_at_most(200) }
 
-
   it('scope not_sell_user_messages') do
     sell_user = create(:user)
     user = create(:user)
@@ -48,6 +47,39 @@ RSpec.describe Message, type: :model do
           end
         end
       end
+    end
+  end
+
+  describe('notice_path') do
+    it('商品詳細ページのpathを返す') do
+      product = create(:product)
+      message = create(:message, messageable: product)
+      path = "/products/#{product.id}"
+      expect(message.notice_path).to eq(path)
+    end
+
+    it('購入済み商品詳細ページのpathを返す') do
+      p_p = create(:purchaced_product)
+      message = create(:purchaced_product_message, messageable: p_p)
+      path = "/purchaced_products/#{p_p.id}"
+      expect(message.notice_path).to eq(path)
+    end
+  end
+
+  describe('notice_image') do
+    it('商品の画像1枚目を返す') do
+      product = create(:product)
+      message = create(:message, messageable: product)
+      expect(message.notice_image).to eq(message.messageable.images[0])
+    end
+  end
+
+  describe('notice_body') do
+    it('お知らせの本文を返す') do
+      user = create(:user)
+      product = create(:product)
+      message = create(:message, messageable: product, user: user)
+      expect(message.notice_body).to eq("#{user.account_name}が#{product.name}にメッセージを送りました。")
     end
   end
 end

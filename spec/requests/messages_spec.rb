@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe "Messages", type: :request do
   describe('POST /messages') do
+    let(:user) { create(:user) }
+
     context('ログインしていない時') do
       it('ログイン画面にリダイレクトする') do
         post(messages_path)
@@ -9,8 +11,16 @@ RSpec.describe "Messages", type: :request do
       end
     end
 
+    context('購入した商品に対するメッセージかつ出品者でも購入者でもない時') do
+      let(:p_p) { create(:purchaced_product) }
+      it('ホーム画面にリダイレクトする') do
+        log_in_request(user)
+        post(messages_path, params: { messageable_type: 'PurchacedProduct', messageable_id: p_p.id })
+        expect(response).to redirect_to(root_url)
+      end
+    end
+
     context('ログインしている時') do
-      let(:user) { create(:user) }
       let(:product) { create(:product) }
       context('有効なパラメーターを送信する時') do
         let(:valid_params) { attributes_for(:message) }
@@ -63,9 +73,8 @@ RSpec.describe "Messages", type: :request do
     context('正しいユーザーである時') do
       it('メッセージを削除できる') do
         log_in_request(user)
-        expect {
-          delete(message_path(message.id), params: { messageable_type: 'Product', messageable_id: product.id })
-        }.to change(Message, :count).by(-1)
+        delete(message_path(message.id), params: { messageable_type: 'Product', messageable_id: product.id })
+        expect(Message.count).to eq(0)
       end
 
       it('商品詳細画面にリダイレクトする') do

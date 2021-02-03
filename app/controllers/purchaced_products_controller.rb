@@ -11,7 +11,8 @@ class PurchacedProductsController < ApplicationController
   end
 
   def show # GET /purchaced_products/:id
-    @p_p = PurchacedProduct.find(params[:id])
+    @p_p = PurchacedProduct.preload(messages: { user: { image_attachment: :blob } }).find(params[:id])
+    @message = Message.new
   end
 
   def create # POST /products/:product_id/purchaced_products

@@ -5,6 +5,7 @@ RSpec.describe PurchacedProduct, type: :model do
   it { is_expected.to belong_to(:product) }
   it { is_expected.to have_many(:notices).dependent(:destroy) }
   it { is_expected.to have_one(:evaluation).dependent(:destroy) }
+  it { is_expected.to have_many(:messages).dependent(:destroy) }
 
   it { is_expected.to delegate_method(:user).to(:product).with_prefix(:sell) }
   it { is_expected.to delegate_method(:name).to(:product) }

@@ -3,6 +3,7 @@ class MessagesController < ApplicationController
   before_action(:find_messageable)
   before_action(:set_message, only: [:destroy])
   before_action(:correct_user, only: [:destroy])
+  before_action(:purchaced_product_correct_user, only: [:create])
 
   def create
     @message = @messageable.messages.new(user: current_user, content: params[:message][:content])
@@ -23,8 +24,8 @@ class MessagesController < ApplicationController
 
   private
     def find_messageable
-      klass = Class.const_get(params[:messageable_type])
-      @messageable = klass.find(params[:messageable_id])
+      @klass = Class.const_get(params[:messageable_type])
+      @messageable = @klass.find(params[:messageable_id])
     end
 
     def set_message
@@ -35,6 +36,15 @@ class MessagesController < ApplicationController
       unless @message.user == current_user
         flash[:danger] = '正しいユーザーではありません。'
         redirect_to(@messageable)
+      end
+    end
+
+    def purchaced_product_correct_user
+      if @klass.to_s == 'PurchacedProduct'
+        unless current_user == @messageable.sell_user || current_user == @messageable.purchace_user
+          flash[:danger] = '有効なユーザーではありません。'
+          redirect_to(root_url)
+        end
       end
     end
 end

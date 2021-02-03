@@ -1,6 +1,10 @@
+<%= javascript_pack_tag('message_validation') %>
 <%= provide(:title, "やること #{@p_p.name}") %>
 
-<h1 class="text-center mb-3"><%= @p_p.name %></h1>
+<h1 class="text-center mb-3">
+  <%= image_tag(@p_p.images[0].variant(gravity: :center, resize:"50x50^", crop:"50x50+0+0").processed) %>
+  <%= @p_p.name %>
+</h1>
 
 <div class="row d-flex justify-content-center">
   <div class="col-md-6">
@@ -13,6 +17,21 @@
       <%= link_to('発送を通知する', ship_purchaced_product_path(@p_p), method: :put, class: 'btn btn-danger btn-lg btn-block') %>
     <% elsif current_user == @p_p.purchace_user && @p_p.shipped? && !@p_p.received # 発送されたが、受け取ってない時受け取ったボタン %>
       <%= link_to('荷物を受け取りました', receive_purchaced_product_path(@p_p), method: :put, class: 'btn btn-danger btn-lg btn-block')%>
+    <% end %>
+
+    <% unless @p_p.messages.empty? %>
+      <div id="messages" class="my-3">
+        <%= render(@p_p.messages) %>
+      </div>
+    <% end %>
+
+    <%= form_with(model: @message, url: messages_path(messageable_type: 'PurchacedProduct', messageable_id: @p_p.id),
+      local: true, class: 'message-form') do |f| %>
+      <h5>メッセージ（200文字以内）</h5>
+      <%= f.text_area(:content, class: 'form-control mb-3', rows: 5, 'v-on:input' => 'onInput($event)') %>
+      <p v-show="!is_longer" class="message-form-initial-empty-error-messgae"></p>
+      <p v-show="is_longer" class="message-form-error-message">200文字以内で入力して下さい。</p>
+      <%= f.submit('メッセージを送る', class: 'btn btn-primary btn-block') %>
     <% end %>
   </div>
 </div>

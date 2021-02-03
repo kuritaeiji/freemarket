@@ -1,5 +1,6 @@
 class PurchacedProduct < ApplicationRecord
   include(Noticeable)
+  include(Messageable)
   belongs_to(:purchace_user, class_name: 'User')
   belongs_to(:product)
   has_one(:evaluation, dependent: :destroy)
@@ -15,6 +16,7 @@ class PurchacedProduct < ApplicationRecord
 
   after_update_commit do
     notices.create(send_user: sell_user, receive_user: purchace_user) if saved_change_to_shipped?
+    messages.create(user: sell_user, content: '荷物を発送しました。')
   end
 
   after_update_commit do

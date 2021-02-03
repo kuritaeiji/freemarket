@@ -4,12 +4,12 @@ include(SessionsHelper)
 RSpec.describe User, type: :model do
   it { is_expected.to belong_to(:prefecture) }
   it { is_expected.to have_many(:products).dependent(:destroy) }
+  it { is_expected.to have_many(:purchace_products).class_name('Product').with_foreign_key(:purchace_user_id).dependent(:destroy) }
   it { is_expected.to have_many(:messages).dependent(:destroy) }
   it { is_expected.to have_many(:send_notices).class_name('Notice').with_foreign_key(:send_user_id).dependent(:destroy) }
   it { is_expected.to have_many(:receive_notices).class_name('Notice').with_foreign_key(:receive_user_id).dependent(:destroy) }
   it { is_expected.to have_many(:likes) }
   it { is_expected.to have_many(:like_products).through(:likes).source(:product) }
-  it { is_expected.to have_many(:purchaced_products).with_foreign_key(:purchace_user_id).dependent(:destroy) }
 
   it { is_expected.to validate_presence_of(:email) }
   it { is_expected.to validate_length_of(:email).is_at_most(50) }

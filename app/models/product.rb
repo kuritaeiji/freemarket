@@ -1,12 +1,15 @@
 class Product < ApplicationRecord
   include(Messageable)
   belongs_to(:user)
+  alias_method(:sell_user, :user)
+  belongs_to(:purchace_user, class_name: 'User', optional: true)
   belongs_to(:shipping_day)
   belongs_to(:status)
   belongs_to(:category)
   has_many(:likes, dependent: :destroy)
   has_many(:like_users, through: :likes, source: :user)
-  has_one(:purchaced_product, dependent: :destroy)
+  has_one(:todo, dependent: :destroy)
+  has_one(:evaluation, dependent: :destroy)
   has_many_attached(:images, dependent: :destroy)
 
   attr_accessor(:image)

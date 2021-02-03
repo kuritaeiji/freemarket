@@ -2,13 +2,19 @@ require 'rails_helper'
 
 RSpec.describe Product, type: :model do
   it { is_expected.to belong_to(:user) }
+  it('alias_method(:sell_user, :user') do
+    product = create(:product)
+    expect(product.sell_user).to eq(product.user)
+  end
+  it { is_expected.to belong_to(:purchace_user).class_name('User').optional }
   it { is_expected.to belong_to(:shipping_day) }
   it { is_expected.to belong_to(:status) }
   it { is_expected.to belong_to(:category) }
   it { is_expected.to have_many(:messages) }
   it { is_expected.to have_many(:likes).dependent(:destroy) }
   it { is_expected.to have_many(:like_users).through(:likes).source(:user) }
-  it { is_expected.to have_one(:purchaced_product).dependent(:destroy) }
+  it { is_expected.to have_one(:todo).dependent(:destroy) }
+  it { is_expected.to have_one(:evaluation).dependent(:destroy) }
 
   it('Messageableモジュールをインクルードする') do
     expect(Product.include?(Messageable)).to eq(true)

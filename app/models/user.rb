@@ -4,12 +4,12 @@ class User < ApplicationRecord
 
   belongs_to(:prefecture)
   has_many(:products, dependent: :destroy)
+  has_many(:purchace_products, class_name: 'Product', foreign_key: :purchace_user_id, dependent: :destroy)
   has_many(:messages, dependent: :destroy)
   has_many(:receive_notices, class_name: 'Notice', foreign_key: 'receive_user_id', dependent: :destroy)
   has_many(:send_notices, class_name: 'Notice', foreign_key: 'send_user_id', dependent: :destroy)
   has_many(:likes, dependent: :destroy)
   has_many(:like_products, through: :likes, source: :product)
-  has_many(:purchaced_products, foreign_key: :purchace_user_id, dependent: :destroy)
 
   has_one_attached(:image, dependent: :destroy)
 

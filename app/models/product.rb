@@ -72,6 +72,10 @@ class Product < ApplicationRecord
     end
   end
 
+  def can_send_message?(current_user)
+    !traded?
+  end
+
   private
     def destroy_likes
       likes.destroy_all if saved_change_to_traded?

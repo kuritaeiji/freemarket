@@ -48,14 +48,14 @@
       </div>
     </div>
 
-    <% if current_user != @product.user %>
+    <% if current_user != @product.user && !@product.traded? %>
       <%= link_to('購入する', product_purchaced_products_path(@product), data: { confirm: '本当に購入しますか？' },
         method: :post, class: 'btn btn-danger btn-block btn-lg mt-5') %>
     <% end %>
 
     <h5 class="my-5"><%= @product.description %></h5>
 
-    <% if current_user == @product.user %>
+    <% if current_user == @product.user || @product.traded? %>
       <h5 id="like-badge">
         <span class="badge badge-secondary badge-pill">
           <i class="fa fa-heart"></i> いいね！ <%= @product.likes.count %>
@@ -72,7 +72,7 @@
       </form>
     <% end %>
 
-    <% if current_user == @product.user %>
+    <% if current_user == @product.user && !@product.traded? %>
       <%= link_to('商品を編集する', edit_product_path(@product), class: 'btn btn-lg btn-primary btn-block mt-5 my-3') %>
       <%= link_to('商品を削除する', product_path(@product), method: :delete, class: 'btn btn-lg btn-danger btn-block')%>
     <% end %>
@@ -83,12 +83,15 @@
       </div>
     <% end %>
 
-    <%= form_with(model: @message, url: messageable_post_url, local: true, class: 'message-form') do |f| %>
-      <h5>メッセージ（200文字以内）</h5>
-      <%= f.text_area(:content, class: 'form-control mb-3', rows: 5, 'v-on:input' => 'onInput($event)') %>
-      <p v-show="!is_longer" class="message-form-initial-empty-error-messgae"></p>
-      <p v-show="is_longer" class="message-form-error-message">200文字以内で入力して下さい。</p>
-      <%= f.submit('メッセージを送る', class: 'btn btn-primary btn-block') %>
+
+    <% unless @product.traded? %>
+      <%= form_with(model: @message, url: messageable_post_url, local: true, class: 'message-form') do |f| %>
+        <h5>メッセージ（200文字以内）</h5>
+        <%= f.text_area(:content, class: 'form-control mb-3', rows: 5, 'v-on:input' => 'onInput($event)') %>
+        <p v-show="!is_longer" class="message-form-initial-empty-error-messgae"></p>
+        <p v-show="is_longer" class="message-form-error-message">200文字以内で入力して下さい。</p>
+        <%= f.submit('メッセージを送る', class: 'btn btn-primary btn-block') %>
+      <% end %>
     <% end %>
   </div>
 </div>

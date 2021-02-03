@@ -11,12 +11,35 @@ RSpec.describe "Messages", type: :request do
       end
     end
 
-    context('購入した商品に対するメッセージかつ出品者でも購入者でもない時') do
-      let(:p_p) { create(:purchaced_product) }
-      it('ホーム画面にリダイレクトする') do
-        log_in_request(user)
-        post(messages_path, params: { messageable_type: 'PurchacedProduct', messageable_id: p_p.id })
-        expect(response).to redirect_to(root_url)
+    context('messageableがtodoの時') do
+      context('出品者でも購入者でもない時') do
+        let(:todo) { create(:todo) }
+        it('ホーム画面にリダイレクトする') do
+          log_in_request(user)
+          post(messages_path, params: { messageable_type: 'Todo', messageable_id: todo.id })
+          expect(response).to redirect_to(root_url)
+        end
+      end
+
+      context('すでに受け取り済みの時') do
+        let(:product) { create(:product, user: user) }
+        let(:todo) { create(:todo, received: true, product: product) }
+        it('ホーム画面にリダイレクトする') do
+          log_in_request(user)
+          post(messages_path, params: { messageable_type: 'Todo', messageable_id: todo.id })
+          expect(response).to redirect_to(root_url)
+        end
+      end
+    end
+
+    context('messageableがproductの時') do
+      context('traded: trueの時') do
+        let(:product) { create(:product, traded: true) }
+        it('ホーム画面にリダイレクトする') do
+          log_in_request(user)
+          post(messages_path, params: { messageable_type: 'Product', messageable_id: product.id })
+          expect(response).to redirect_to(root_url)
+        end
       end
     end
 
@@ -50,38 +73,38 @@ RSpec.describe "Messages", type: :request do
     end
   end
 
-  describe('DELETE /message/:id') do
-    let(:user) { create(:user) }
-    let(:product) { create(:product) }
-    let(:message) { create(:message, user: user, messageable: product) }
-    context('ログインしていない時') do
-      it('ログイン画面にリダイレクトする') do
-        delete(message_path(message.id))
-        expect(response).to redirect_to(log_in_path)
-      end
-    end
+  # describe('DELETE /message/:id') do
+  #   let(:user) { create(:user) }
+  #   let(:product) { create(:product) }
+  #   let(:message) { create(:message, user: user, messageable: product) }
+  #   context('ログインしていない時') do
+  #     it('ログイン画面にリダイレクトする') do
+  #       delete(message_path(message.id))
+  #       expect(response).to redirect_to(log_in_path)
+  #     end
+  #   end
 
-    context('正しいユーザーでない時') do
-      let(:other_user) { create(:user) }
-      it('ホーム画面にリダイレクトする') do
-        log_in_request(other_user)
-        delete(message_path(message.id), params: { messageable_type: 'Product', messageable_id: product.id })
-        expect(response).to redirect_to(product_path(product.id))
-      end
-    end
+  #   context('正しいユーザーでない時') do
+  #     let(:other_user) { create(:user) }
+  #     it('ホーム画面にリダイレクトする') do
+  #       log_in_request(other_user)
+  #       delete(message_path(message.id), params: { messageable_type: 'Product', messageable_id: product.id })
+  #       expect(response).to redirect_to(product_path(product.id))
+  #     end
+  #   end
 
-    context('正しいユーザーである時') do
-      it('メッセージを削除できる') do
-        log_in_request(user)
-        delete(message_path(message.id), params: { messageable_type: 'Product', messageable_id: product.id })
-        expect(Message.count).to eq(0)
-      end
+  #   context('正しいユーザーである時') do
+  #     it('メッセージを削除できる') do
+  #       log_in_request(user)
+  #       delete(message_path(message.id), params: { messageable_type: 'Product', messageable_id: product.id })
+  #       expect(Message.count).to eq(0)
+  #     end
 
-      it('商品詳細画面にリダイレクトする') do
-        log_in_request(user)
-        delete(message_path(message.id), params: { messageable_type: 'Product', messageable_id: product.id })
-        expect(response).to redirect_to(product_path(product.id))
-      end
-    end
-  end
+  #     it('商品詳細画面にリダイレクトする') do
+  #       log_in_request(user)
+  #       delete(message_path(message.id), params: { messageable_type: 'Product', messageable_id: product.id })
+  #       expect(response).to redirect_to(product_path(product.id))
+  #     end
+  #   end
+  # end
 end

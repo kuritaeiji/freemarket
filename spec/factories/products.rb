@@ -33,5 +33,9 @@ FactoryBot.define do
     trait(:with_multiple_images) do
       images { [fixture_file_upload('spec/images/a.jpg', 'image/jpg'), fixture_file_upload('spec/images/m.jpg', 'image/jpg')] }
     end
+
+    trait(:purchaced_product) do
+      association(:purchace_user, factory: :user)
+    end
   end
 end

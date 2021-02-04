@@ -11,5 +11,13 @@
     <%= todo_alert %>
 
     <%= todo_button %>
+
+    <% unless @todo.messages.empty? %>
+      <div id="messages" class="my-3">
+        <%= render(@todo.messages) %>
+      </div>
+    <% end %>
+
+    <%= render('messages/message_form') %>
   </div>
 </div>

@@ -37,7 +37,7 @@ class PurchacedProduct < ApplicationRecord
     images[0]
   end
 
-  def create_notice(message)
+  def create_notice(message) # messageable
     if message.user == sell_user
       message.notices.create(send_user: sell_user, receive_user: purchace_user)
     else

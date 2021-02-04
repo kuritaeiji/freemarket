@@ -7,12 +7,13 @@ RSpec.describe Evaluation, type: :model do
     .is_less_than_or_equal_to(3) }
   it { is_expected.to validate_presence_of(:score) }
 
-  # it('評価すると、お知らせを作成') do
-  #   p_p = create(:purchaced_product)
-  #   expect {
-  #     p_p.create_evaluation(score: 1)
-  #   }.to change(Notice, :count).by(1)
-  # end
+  it('評価すると、お知らせを作成し、商品のsoldedをtrueにする') do
+    product = create(:purchace_product)
+    expect {
+      product.create_evaluation(score: 1)
+    }.to change(Notice, :count).by(1)
+    expect(Product.last.solded?).to eq(true)
+  end
 
   # describe('notice_path') do
   #   it('#を返す') do

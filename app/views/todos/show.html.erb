@@ -1,0 +1,15 @@
+<%= javascript_pack_tag('message_validation') %>
+<%= provide(:title, "やること #{@todo.product.name}") %>
+
+<h1 class="text-center mb-3">
+  <%= image_tag(@todo.product.images[0].variant(gravity: :center, resize:"50x50^", crop:"50x50+0+0").processed) %>
+  <%= @todo.product.name %>
+</h1>
+
+<div class="row d-flex justify-content-center">
+  <div class="col-md-6">
+    <%= todo_alert %>
+
+    <%= todo_button %>
+  </div>
+</div>

@@ -34,7 +34,8 @@ FactoryBot.define do
       images { [fixture_file_upload('spec/images/a.jpg', 'image/jpg'), fixture_file_upload('spec/images/m.jpg', 'image/jpg')] }
     end
 
-    trait(:purchaced_product) do
+    factory(:purchace_product) do
+      traded { true }
       association(:purchace_user, factory: :user)
     end
   end

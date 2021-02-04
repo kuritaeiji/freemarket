@@ -40,6 +40,8 @@ class Product < ApplicationRecord
 
   after_update_commit(:destroy_likes)
 
+  delegate(:shipped, :received, :shipped?, :received?, to: :todo)
+
   def self.as_json(products)
     products.map { |p| p.as_json }
   end

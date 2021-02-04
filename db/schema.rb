@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_03_053742) do
+ActiveRecord::Schema.define(version: 2021_02_03_093058) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -120,11 +120,11 @@ ActiveRecord::Schema.define(version: 2021_02_03_053742) do
   end
 
   create_table "todos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.boolean "shipped", default: false
-    t.boolean "received", default: false
     t.bigint "product_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "shipped", default: false
+    t.boolean "received", default: false
     t.index ["product_id"], name: "index_todos_on_product_id"
   end
 

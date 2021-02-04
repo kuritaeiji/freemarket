@@ -1,10 +1,10 @@
-<%= provide(:title, "#{@p_p.sell_user.account_name}への評価") %>
+<%= provide(:title, "#{@product.sell_user.account_name}への評価") %>
 
-<h1 class="text-center mb-3"><%= @p_p.sell_user.account_name %>への評価</h1>
+<h1 class="text-center mb-3"><%= @product.sell_user.account_name %>への評価</h1>
 
 <div class="row d-flex justify-content-center">
   <div class="col-md-6">
-    <%= form_with(model: @evaluation, url: purchaced_product_evaluations_path(@p_p), local: true) do |f| %>
+    <%= form_with(model: @evaluation, url: product_evaluations_path(@product), local: true) do |f| %>
       <%= render('shared/error_messages', model: @evaluation) %>
 
       <div class="form-check score-radio my-3">

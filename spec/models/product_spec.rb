@@ -111,4 +111,20 @@ RSpec.describe Product, type: :model do
       end
     end
   end
+
+  describe('can_send_message?') do
+    it('まだ取引されていない時trueを返す') do
+      product_mock = double('Product')
+      allow(product_mock).to receive(:traded?).and_return(false)
+      allow(product_mock).to receive(:can_send_message?).and_return(!product_mock.traded?)
+      expect(product_mock.can_send_message?('a')).to eq(true)
+    end
+
+    it('すでに取引されている時falseを返す') do
+      product_mock = double('Product')
+      allow(product_mock).to receive(:traded?).and_return(true)
+      allow(product_mock).to receive(:can_send_message?).and_return(!product_mock.traded?)
+      expect(product_mock.can_send_message?('a')).to eq(false)
+    end
+  end
 end

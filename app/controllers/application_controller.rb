@@ -13,6 +13,13 @@ class ApplicationController < ActionController::Base
       end
     end
 
+    def not_have_product_to_evaluate
+      if logged_in? && products = current_user.purchace_products.where(solded: false, received: true)
+        flash[:danger] = 'ユーザーを評価して下さい。'
+        redirect_to(new_product_evaluation_url(products[0]))
+      end
+    end
+
     def set_referer_to_session
       session[:referer] = request.referer
     end

@@ -95,4 +95,48 @@ RSpec.describe "Products", type: :request do
       end
     end
   end
+
+  describe('PUT /products/:id/purchace') do
+    let(:user) { create(:user) }
+    context('ログインしていない時') do
+      it('ログイン画面にリダイレクトする') do
+        put(purchace_product_path(1))
+        expect(response).to redirect_to(log_in_url)
+      end
+    end
+
+    context('ログインユーザーが出品者である時') do
+      let(:product) { create(:product, user: user )}
+      it('ホーム画面にリダイレクトする') do
+        log_in_request(user)
+        put(purchace_product_path(product.id))
+        expect(response).to redirect_to(root_url)
+      end
+    end
+
+    context('認可されたユーザーである時') do
+      let(:product) { create(:product) }
+      it('商品のpurchace_user_id、tradedが更新される') do
+        log_in_request(user)
+        put(purchace_product_path(product.id))
+        aggregate_failures do
+          expect(product.reload.purchace_user).to eq(user)
+          expect(product.traded?).to eq(true)
+        end
+      end
+
+      it('todoを作成する') do
+        log_in_request(user)
+        expect {
+          put(purchace_product_path(product.id))
+        }.to change(Todo, :count).by(1)
+      end
+
+      it('todo詳細画面にリダイレクトする') do
+        log_in_request(user)
+        put(purchace_product_path(product.id))
+        expect(response).to redirect_to(todo_path(Todo.first))
+      end
+    end
+  end
 end

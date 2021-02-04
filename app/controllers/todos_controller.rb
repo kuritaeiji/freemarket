@@ -8,7 +8,7 @@ class TodosController < ApplicationController
   before_action(:purchace_user_or_sell_user, only: [:show])
 
   def index
-    @todos = current_user.products.eager_load(:todo).where(traded: true, solded: false).map { |p| p.todo }
+    @todos = current_user.not_received_todos.paginate(page: params[:page], per_page: 20)
   end
 
   def show

@@ -51,6 +51,13 @@ class User < ApplicationRecord
     like_products.include?(product)
   end
 
+  def not_received_todos
+    sell_todos = products.eager_load(:todo).where(traded: true, solded: false).map { |p| p.todo }
+    purchace_todos = purchace_products.eager_load(:todo).where(traded: true, solded: false).map { |p| p.todo }
+    todos = sell_todos.concat(purchace_todos)
+    todos.sort { |a, b| b.created_at <=> a.created_at }
+  end
+
   private
     def prepare_account_activation
       create_account_activation_token_and_digest

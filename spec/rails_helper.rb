@@ -50,6 +50,7 @@ RSpec.configure do |config|
   config.include(LogInRequestHelper, type: :request)
   config.include(LogInFeatureHelper, type: :feature)
   config.include(LogOutFeatureHelper, type: :feature)
+  config.include(LogInHelperHelper, type: :helper)
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false

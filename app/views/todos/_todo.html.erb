@@ -1,0 +1,8 @@
+<div class="todo-link">
+  <%= link_to(todo) do %>
+    <div class="w-100">
+      <%= image_tag(todo.product.images[0].variant(gravity: :center, resize:"70x70^", crop:"70x70+0+0").processed) %>
+      <span class="todo-body"><%= todo_body(todo) %><span>
+    </div>
+  <% end %>
+</div>

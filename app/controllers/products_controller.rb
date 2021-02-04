@@ -8,6 +8,9 @@ class ProductsController < ApplicationController
   def index
   end
 
+  def purchace_index
+  end
+
   def show
     @product = Product.preload(messages: { user: { image_attachment: :blob } }).find(params[:id])
     @product.set_image_as_base64(0)

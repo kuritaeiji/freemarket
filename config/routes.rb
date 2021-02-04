@@ -12,9 +12,7 @@ Rails.application.routes.draw do
       get(:edit_address)
       put(:update_address)
     end
-    collection do
-      post('oauth')
-    end
+    post(:oauth, on: :collection)
   end
   resources(:password_resets, only: [:new, :create, :edit, :update])
   resources(:todos, only: [:index, :show]) do
@@ -26,25 +24,28 @@ Rails.application.routes.draw do
   resources(:products) do
     collection do
       get(:search)
+      get(:purchace_index)
     end
-    member do
-      put(:purchace)
-    end
+    put(:purchace, on: :member)
     resources(:evaluations, only: [:new, :create])
   end
   resources(:messages, only: [:create, :destroy])
   resources(:notices, only: [:index])
   resources(:likes, only: [:index])
+
   namespace(:api) do
     resources(:products, only: [:index]) do
       resources(:likes, only: [:create])
       resource(:like, only: [:destroy])
       collection do
         get(:traded_index)
+        get(:solded_index)
       end
-      member do
-        get(:image)
-      end
+      get(:image, on: :member)
+    end
+
+    resources(:purchace_products, only: [:index]) do
+      get(:received_index, on: :collection)
     end
   end
 end

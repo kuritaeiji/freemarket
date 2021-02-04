@@ -1,18 +1,15 @@
-<%= javascript_pack_tag('products_index.js') %>
+<%= javascript_pack_tag('purchace_products_index') %>
 
-<%= provide(:title, '出品した商品') %>
-<h1 class='text-center mb-3'>出品した商品</h1>
+<%= provide(:title, '購入した商品') %>
+<h1 class='text-center mb-3'>購入した商品</h1>
 
 <div class="row">
-  <div class="col-md-8" id="products-index">
+  <div class="col-md-8" id="purchace-products-index">
     <div class="row no-gutters link-tabs">
-      <div class="col-4 py-3" v-on:click="onClick(0)" v-bind:class="{ linkTab: selected_index[0], linkTabHover: true }">
-        <h4 class="text-center">出品中</h4>
-      </div>
-      <div class="col-4 py-3" v-on:click="onClick(1)" v-bind:class="{ linkTab: selected_index[1], linkTabHover: true }">
+      <div class="col-6 py-3" v-on:click="onClick(0)" v-bind:class="{ linkTab: selected_index[0], linkTabHover: true }">
         <h4 class="text-center">取引中</h4>
       </div>
-      <div class="col-4 py-3" v-on:click="onClick(2)" v-bind:class="{ linkTab: selected_index[2], linkTabHover: true }">
+      <div class="col-6 py-3" v-on:click="onClick(1)" v-bind:class="{ linkTab: selected_index[1], linkTabHover: true }">
         <h4 class="text-center">取引済み</h4>
       </div>
     </div>

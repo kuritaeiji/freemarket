@@ -23,18 +23,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       },
       getUntradedProducts: function() {
-        return axios.get('api/products')
+        return axios.get('/api/products')
       },
       getTradedProducts: function() {
-        return axios.get('api/products/traded_index')
+        return axios.get('/api/products/traded_index')
       },
       getSoldedProducts: function() {
+        return axios.get('/api/products/solded_index')
       }
     },
     mounted: function() {
       axios.get('api/products')
       .then((response) => {
-        console.log(response.data)
         this.products = response.data;
       })
       .catch((error) => {

@@ -81,11 +81,11 @@ RSpec.describe User, type: :model do
     expect(user.reload.authenticate?(user.activation_token, :activation_digest)).to eq(true)
   end
 
-  it('ユーザー作成後にアカウント有効化メールを送信') do
-    allow(UserMailer).to receive_message_chain(:send_account_activation_mail, :deliver_now)
-    user = create(:user)
-    expect(UserMailer).to have_received(:send_account_activation_mail).with(user.reload)
-  end
+  # it('ユーザー作成後にアカウント有効化メールを送信') do
+  #   allow(UserMailer).to receive_message_chain(:send_account_activation_mail, :deliver_now)
+  #   user = create(:user)
+  #   expect(UserMailer).to have_received(:send_account_activation_mail).with(user.reload)
+  # end
 
   describe('create_reset_token_and_digest') do
     let(:user) { create(:user) }

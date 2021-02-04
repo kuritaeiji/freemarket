@@ -59,16 +59,10 @@ class Product < ApplicationRecord
     end
   end
 
+  # messageableの責務
   def create_notice(message)
-    sell_user = message.messageable.user # 商品を出品しているユーザー
-    if message.user == sell_user # メッセージの送信者が商品の出品者である
-      not_sell_user_messages = message.messageable.messages.not_sell_user_messages(sell_user) # 商品の出品者が送信者でないメッセージ
-      if not_sell_user_messages
-        receive_notice_users = not_sell_user_messages.map { |m| m.user } # 知らせを受け取るべきユーザーたち
-        receive_notice_users.each do |u|
-          message.notices.create(send_user: sell_user, receive_user: u)
-        end
-      end
+    if message.user == sell_user # メッセージの送信者が商品の出品者である時、今までのメッセージユーザー全てにお知らせを作成する
+      create_notice_from_sell_user_to_purchace_user(message)
     else # メッセージの送信者が商品の出品者でない時、出品者にお知らせを送る
       message.notices.create(send_user: message.user, receive_user: sell_user)
     end
@@ -78,8 +72,28 @@ class Product < ApplicationRecord
     !traded?
   end
 
+  def notice_messageable_body(message)
+    "#{message.user.account_name}が#{name}にメッセージを送りました。"
+  end
+
+  def notice_messageable_image
+    images[0]
+  end
+
+  def notice_messageable_path
+    product_path(self)
+  end
+
   private
     def destroy_likes
       likes.destroy_all if saved_change_to_traded?
+    end
+
+    def create_notice_from_sell_user_to_purchace_user(message)
+      not_sell_user_messages = messages.where.not(user: sell_user)
+      receive_users = not_sell_user_messages.map { |m| m.user }.uniq
+      receive_users.each do |u|
+        message.notices.create(send_user: message.user, receive_user: u)
+      end
     end
 end

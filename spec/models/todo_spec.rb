@@ -96,4 +96,57 @@ RSpec.describe Todo, type: :model do
       end
     end
   end
+
+  describe('notice_messgeable_body(message)') do
+    it('todoのメッセージに対するお知らせの本文を返す') do
+      todo = create(:todo)
+      message = create(:todo_message, messageable: todo)
+      expect(todo.notice_messageable_body(message)).to eq("#{message.user.account_name}が#{todo.product.name}にメッセージを送りました。")
+    end
+  end
+
+  describe('notice_messageable_image') do
+    it('商品画像の一枚目を返す') do
+      todo = create(:todo)
+      expect(todo.notice_messageable_image).to eq(todo.product.images[0])
+    end
+  end
+
+  describe('notice_path') do
+    context('受け取っていない時') do
+      it('todo詳細ページのパスを返す') do
+        todo = create(:todo)
+        expect(todo.notice_messageable_path).to eq("/todos/#{todo.id}")
+      end
+    end
+
+    context('すでに受け取っている時') do
+      it('#を返す') do
+        todo = create(:todo, received: true)
+        expect(todo.notice_messageable_path).to eq('#')
+      end
+    end
+  end
+
+  describe('notice_body') do
+    it('お知らせの本文を返す') do
+      todo = create(:todo)
+      expect(todo.notice_body).to 
+        eq("#{todo.product.purchace_user.account_name}が商品#{todo.product.name}を受けとったため取引が終了しました。")
+    end
+  end
+
+  describe('notice_path') do
+    it('#を返す') do
+      todo = create(:todo)
+      expect(todo.notice_path).to eq('#')
+    end
+  end
+
+  describe('notice_image') do
+    it('商品画像の一枚目を返す') do
+      todo = create(:todo)
+      expect(todo.notice_image).to eq(todo.product.images[0])
+    end
+  end
 end

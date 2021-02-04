@@ -10,6 +10,7 @@ class Evaluation < ApplicationRecord
     product.update(solded: true)
   end
 
+  # noticeableの責務
   def notice_path
     '#'
   end

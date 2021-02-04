@@ -13,30 +13,18 @@ class Message < ApplicationRecord
   })
 
   def notice_path
-    send(url_method_name, messageable)
+    messageable.notice_messageable_path
   end
 
   def notice_body
-    "#{user.account_name}が#{messageable.name}にメッセージを送りました。"
+    messageable.notice_messageable_body(self)
   end
 
   def notice_image
-    messageable.images[0]
+    messageable.notice_messageable_image
   end
 
   private
-    def url_method_name
-      new_type = ''
-      messageable_type.each_char do |c|
-        if c.match?(/[A-Z]/)
-          new_type = "#{new_type}_#{c}"
-        else
-          new_type = "#{new_type}#{c}"
-        end
-      end
-      (new_type[1..-1].downcase + "_path").to_sym
-    end
-    
     def create_notice
       messageable.create_notice(self)
     end

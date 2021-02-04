@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Message, type: :model do
   it { is_expected.to belong_to(:user) }
   it { is_expected.to belong_to(:messageable) }
-  it { is_expected.to have_many(:notices) }
+  it { is_expected.to have_many(:notices).dependent(:destroy) }
 
   it { is_expected.to validate_presence_of(:content) }
   it { is_expected.to validate_length_of(:content).is_at_most(200) }
@@ -51,35 +51,39 @@ RSpec.describe Message, type: :model do
   end
 
   describe('notice_path') do
-    it('商品詳細ページのpathを返す') do
+    it('messageableにnotice_pathを送信する') do
       product = create(:product)
       message = create(:message, messageable: product)
-      path = "/products/#{product.id}"
-      expect(message.notice_path).to eq(path)
-    end
-
-    it('購入済み商品詳細ページのpathを返す') do
-      p_p = create(:purchaced_product)
-      message = create(:purchaced_product_message, messageable: p_p)
-      path = "/purchaced_products/#{p_p.id}"
-      expect(message.notice_path).to eq(path)
+      allow(product).to receive(:notice_messageable_path)
+      message.notice_path
+      expect(product).to have_received(:notice_messageable_path)
     end
   end
 
   describe('notice_image') do
-    it('商品の画像1枚目を返す') do
+    it('messageableにnotice_product_imageを送信する') do
       product = create(:product)
       message = create(:message, messageable: product)
-      expect(message.notice_image).to eq(message.messageable.images[0])
+      allow(product).to receive(:notice_messageable_image)
+      message.notice_image
+      expect(product).to have_received(:notice_messageable_image)
     end
   end
 
   describe('notice_body') do
-    it('お知らせの本文を返す') do
-      user = create(:user)
+    it('messgeableにnotice_bodyを送信する') do
       product = create(:product)
-      message = create(:message, messageable: product, user: user)
-      expect(message.notice_body).to eq("#{user.account_name}が#{product.name}にメッセージを送りました。")
+      message = create(:message, messageable: product)
+      allow(product).to receive(:notice_messageable_body)
+      message.notice_body
+      expect(product).to have_received(:notice_messageable_body)
     end
+  end
+
+  it('メッセージが作成されると、messageableにcreate_notice(self)を送信する') do
+    product = create(:product)
+    allow(product).to receive(:create_notice)
+    message = create(:message, messageable: product)
+    expect(product).to have_received(:create_notice).with(message)
   end
 end

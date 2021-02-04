@@ -1,8 +1,8 @@
-<%= link_to(notice_path(notice), class: 'notice-link') do %>
+<%= link_to(notice.notice_path, class: 'notice-link') do %>
   <div class="d-flex notice">
-    <div><%= notice_image(notice) %></div>
+    <div><%= image_tag(notice.notice_image.variant(gravity: :center, resize:"50x50^", crop:"50x50+0+0").processed) %></div>
     <div class="notice-body">
-      <span class="notice-span"><%= notice_body(notice) %></span>
+      <span class="notice-span"><%= notice.notice_body %></span>
     </div>
   </div>
 <% end %>

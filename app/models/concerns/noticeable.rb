@@ -1,5 +1,5 @@
 module Noticeable
-  # type 'Message', 'Like', 'Evaluation', 'PurchacedProduct'(発送通知)
+  # type 'Message', 'Like', 'Evaluation', 'Todo'(取引終了通知)
   extend(ActiveSupport::Concern)
   include(Rails.application.routes.url_helpers)
 

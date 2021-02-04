@@ -54,7 +54,6 @@ class User < ApplicationRecord
   private
     def prepare_account_activation
       create_account_activation_token_and_digest
-      UserMailer.send_account_activation_mail(self).deliver_now
     end
 
     def create_account_activation_token_and_digest

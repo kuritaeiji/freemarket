@@ -5,6 +5,7 @@ RSpec.feature "ProductsJavascripts", type: :feature do
     user = create(:user)
     untraded_products = create_list(:product, 2, user: user)
     traded_products = create_list(:product, 2, traded: true, user: user)
+    solded_products = create_list(:product, 2, traded: true, solded: true, user: user)
     log_in_feature(user)
 
     visit(products_path)
@@ -17,6 +18,13 @@ RSpec.feature "ProductsJavascripts", type: :feature do
 
     expect(page).not_to have_content(untraded_products[0].name)
     expect(page).not_to have_content(untraded_products[1].name)
+
+    find('h4', text: '取引済み').click
+    expect(page).to have_content(solded_products[0].name)
+    expect(page).to have_content(solded_products[0].name)
+
+    expect(page).not_to have_content(traded_products[0].name)
+    expect(page).not_to have_content(traded_products[1].name)
   end
 
   scenario('商品詳細画面の写真を切り替えられる', js: true) do

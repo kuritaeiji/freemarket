@@ -2,12 +2,19 @@ require 'rails_helper'
 
 RSpec.describe Product, type: :model do
   it { is_expected.to belong_to(:user) }
+  it('alias_method(:sell_user, :user') do
+    product = create(:product)
+    expect(product.sell_user).to eq(product.user)
+  end
+  it { is_expected.to belong_to(:purchace_user).class_name('User').optional }
   it { is_expected.to belong_to(:shipping_day) }
   it { is_expected.to belong_to(:status) }
   it { is_expected.to belong_to(:category) }
   it { is_expected.to have_many(:messages) }
-  it { is_expected.to have_many(:likes) }
+  it { is_expected.to have_many(:likes).dependent(:destroy) }
   it { is_expected.to have_many(:like_users).through(:likes).source(:user) }
+  it { is_expected.to have_one(:todo).dependent(:destroy) }
+  it { is_expected.to have_one(:evaluation).dependent(:destroy) }
 
   it('Messageableモジュールをインクルードする') do
     expect(Product.include?(Messageable)).to eq(true)
@@ -102,6 +109,74 @@ RSpec.describe Product, type: :model do
           product.update(name: 'テスト')
         }.not_to change(product.likes, :count)
       end
+    end
+  end
+
+  describe('can_send_message?') do
+    it('まだ取引されていない時trueを返す') do
+      product_mock = double('Product')
+      allow(product_mock).to receive(:traded?).and_return(false)
+      allow(product_mock).to receive(:can_send_message?).and_return(!product_mock.traded?)
+      expect(product_mock.can_send_message?('a')).to eq(true)
+    end
+
+    it('すでに取引されている時falseを返す') do
+      product_mock = double('Product')
+      allow(product_mock).to receive(:traded?).and_return(true)
+      allow(product_mock).to receive(:can_send_message?).and_return(!product_mock.traded?)
+      expect(product_mock.can_send_message?('a')).to eq(false)
+    end
+  end
+
+  describe('create_notice(message)') do
+    let(:user) { create(:user) }
+    context('メッセージユーザーが出品者である時') do
+      let!(:product) { create(:product, user: user) }
+      let!(:other_user) { create(:user) }
+      let!(:message1) { create(:message, user: other_user, messageable: product) }
+      let!(:message2) { create(:message, user: other_user, messageable: product) }
+      let!(:messages) { create_list(:message, 2, messageable: product) }
+      it('これまでにメッセージを送ってきたユーザー全員にお知らせを作成する') do
+        expect {
+          sell_user_message = create(:message, user: user, messageable: product)
+        }.to change(Notice, :count).by(3)
+        notices = other_user.receive_notices
+        expect(notices.length).to eq(1)
+        expect(notices[0].send_user).to eq(user)
+      end
+    end
+
+    context('メッセージユーザーが出品者以外である時') do
+      let!(:product) { create(:product, user: user) }
+      it('出品者に対するお知らせを作成する') do
+        expect {
+          create(:message, messageable: product)
+        }.to change(user.receive_notices, :count).by(1)
+        notice = user.receive_notices[0]
+        expect(notice.send_user).to eq(Message.first.user)
+      end
+    end
+  end
+
+  describe('notice_messgeable_body(message)') do
+    it('商品のメッセージに対するお知らせの本文を返す') do
+      product = create(:product)
+      message = create(:message, messageable: product)
+      expect(product.notice_messageable_body(message)).to eq("#{message.user.account_name}が#{product.name}にメッセージを送りました。")
+    end
+  end
+
+  describe('notice_messageable_image') do
+    it('商品画像の一枚目を返す') do
+      product = create(:product)
+      expect(product.notice_messageable_image).to eq(product.images[0])
+    end
+  end
+
+  describe('notice_messageable_path') do
+    it('商品詳細ページのパスを返す') do
+      product = create(:product)
+      expect(product.notice_messageable_path).to eq("/products/#{product.id}")
     end
   end
 end

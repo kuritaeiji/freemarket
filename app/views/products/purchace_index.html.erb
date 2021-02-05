@@ -1,0 +1,28 @@
+<%= javascript_pack_tag('purchace_products_index') %>
+
+<%= provide(:title, '購入した商品') %>
+<h1 class='text-center mb-3'>購入した商品</h1>
+
+<div class="row">
+  <div class="col-md-8" id="purchace-products-index">
+    <div class="row no-gutters link-tabs">
+      <div class="col-6 py-3" v-on:click="onClick(0)" v-bind:class="{ linkTab: selected_index[0], linkTabHover: true }">
+        <h4 class="text-center">取引中</h4>
+      </div>
+      <div class="col-6 py-3" v-on:click="onClick(1)" v-bind:class="{ linkTab: selected_index[1], linkTabHover: true }">
+        <h4 class="text-center">取引済み</h4>
+      </div>
+    </div>
+
+    <div class="products-index">
+      <a v-for="product of products" v-bind:key="product.id" v-bind:href="product.url" class="d-flex justify-content-start product-link py-3 px-2">
+        <div class="product-image">
+          <img v-bind:src="product.image" class="auto-image-50-50">
+        </div>
+        <h5 class="ml-4">{{ product.name }}</h5>
+      </a>
+    </div>
+  </div>
+
+  <%= render('shared/menu') %>
+</div>

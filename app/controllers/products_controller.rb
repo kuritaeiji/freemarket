@@ -1,10 +1,14 @@
 class ProductsController < ApplicationController
-  before_action(:log_in_user, only: [:new, :create, :edit, :update, :index])
-  before_action(:set_product, only: [:show, :edit, :update, :destroy])
+  before_action(:log_in_user, only: [:new, :create, :edit, :update, :index, :purchace])
+  before_action(:set_product, only: [:show, :edit, :update, :destroy, :purchace])
   before_action(:correct_user, only: [:edit, :update, :destroy])
-  before_action(:untraded_product, only: [:show, :edit, :update, :destroy])
+  before_action(:purchace_correct_user, only: [:purchace])
+  before_action(:untraded_product, only: [:edit, :update, :destroy])
 
   def index
+  end
+
+  def purchace_index
   end
 
   def show
@@ -45,6 +49,13 @@ class ProductsController < ApplicationController
     redirect_to(root_url)
   end
 
+  def purchace # PUT /products/:id/purchace
+    @product.update(traded: true, purchace_user: current_user)
+    todo = @product.create_todo
+    flash[:success] = '商品を購入しました。'
+    redirect_to(todo)
+  end
+
   def search
     @keywords = search_params[:keywords]
     @products = Product.search(search_params).order(created_at: :desc).paginate(page: params[:page], per_page: 52)
@@ -58,6 +69,13 @@ class ProductsController < ApplicationController
     def correct_user
       unless @product.user == current_user
         flash[:danger] = '正しいユーザーではありません。'
+        redirect_to(root_url)
+      end
+    end
+
+    def purchace_correct_user
+      if @product.user == current_user
+        flash[:danger] = '出品者は購入できません。'
         redirect_to(root_url)
       end
     end

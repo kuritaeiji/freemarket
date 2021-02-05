@@ -12,11 +12,20 @@ class Message < ApplicationRecord
     where.not(user: sell_user)
   })
 
+  def notice_path
+    messageable.notice_messageable_path
+  end
+
+  def notice_body
+    messageable.notice_messageable_body(self)
+  end
+
+  def notice_image
+    messageable.notice_messageable_image
+  end
+
   private
     def create_notice
-      if messageable_type == 'Product'
-        ProductMessageCreateNotice.create_notice(self)
-      elsif messageable_type == 'TradeProduct'
-      end
+      messageable.create_notice(self)
     end
 end

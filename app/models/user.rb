@@ -4,6 +4,7 @@ class User < ApplicationRecord
 
   belongs_to(:prefecture)
   has_many(:products, dependent: :destroy)
+  has_many(:purchace_products, class_name: 'Product', foreign_key: :purchace_user_id, dependent: :destroy)
   has_many(:messages, dependent: :destroy)
   has_many(:receive_notices, class_name: 'Notice', foreign_key: 'receive_user_id', dependent: :destroy)
   has_many(:send_notices, class_name: 'Notice', foreign_key: 'send_user_id', dependent: :destroy)
@@ -50,10 +51,30 @@ class User < ApplicationRecord
     like_products.include?(product)
   end
 
+  def not_received_todos
+    sell_todos = products.eager_load(:todo).where(traded: true, solded: false).map { |p| p.todo }
+    purchace_todos = purchace_products.eager_load(:todo).where(traded: true, solded: false).map { |p| p.todo }
+    todos = sell_todos.concat(purchace_todos)
+    todos.sort { |a, b| b.created_at <=> a.created_at }
+  end
+
+  def purchace_products_to_evaluate
+    purchace_products.where(solded: false).select { |p| p.received? }
+  end
+
+  def average_score
+    evaluations = products.map { |p| p.evaluation }.compact
+    if evaluations.empty?
+      '無し'
+    else
+      sum = evaluations.sum(0) { |e| e.score }
+      (sum.to_f / evaluations.length).round(1)
+    end
+  end
+
   private
     def prepare_account_activation
       create_account_activation_token_and_digest
-      UserMailer.send_account_activation_mail(self).deliver_now
     end
 
     def create_account_activation_token_and_digest

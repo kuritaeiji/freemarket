@@ -1,11 +1,15 @@
 class Product < ApplicationRecord
   include(Messageable)
   belongs_to(:user)
+  alias_method(:sell_user, :user)
+  belongs_to(:purchace_user, class_name: 'User', optional: true)
   belongs_to(:shipping_day)
   belongs_to(:status)
   belongs_to(:category)
   has_many(:likes, dependent: :destroy)
   has_many(:like_users, through: :likes, source: :user)
+  has_one(:todo, dependent: :destroy)
+  has_one(:evaluation, dependent: :destroy)
   has_many_attached(:images, dependent: :destroy)
 
   attr_accessor(:image)
@@ -36,6 +40,8 @@ class Product < ApplicationRecord
 
   after_update_commit(:destroy_likes)
 
+  delegate(:shipped, :received, :shipped?, :received?, to: :todo)
+
   def self.as_json(products)
     products.map { |p| p.as_json }
   end
@@ -53,8 +59,41 @@ class Product < ApplicationRecord
     end
   end
 
+  # messageableの責務
+  def create_notice(message)
+    if message.user == sell_user # メッセージの送信者が商品の出品者である時、今までのメッセージユーザー全てにお知らせを作成する
+      create_notice_from_sell_user_to_purchace_user(message)
+    else # メッセージの送信者が商品の出品者でない時、出品者にお知らせを送る
+      message.notices.create(send_user: message.user, receive_user: sell_user)
+    end
+  end
+
+  def can_send_message?(current_user)
+    !traded?
+  end
+
+  def notice_messageable_body(message)
+    "#{message.user.account_name}が#{name}にメッセージを送りました。"
+  end
+
+  def notice_messageable_image
+    images[0]
+  end
+
+  def notice_messageable_path
+    product_path(self)
+  end
+
   private
     def destroy_likes
       likes.destroy_all if saved_change_to_traded?
+    end
+
+    def create_notice_from_sell_user_to_purchace_user(message)
+      not_sell_user_messages = messages.where.not(user: sell_user)
+      receive_users = not_sell_user_messages.map { |m| m.user }.uniq
+      receive_users.each do |u|
+        message.notices.create(send_user: message.user, receive_user: u)
+      end
     end
 end

@@ -3,11 +3,10 @@ require 'rails_helper'
 RSpec.describe Message, type: :model do
   it { is_expected.to belong_to(:user) }
   it { is_expected.to belong_to(:messageable) }
-  it { is_expected.to have_many(:notices) }
+  it { is_expected.to have_many(:notices).dependent(:destroy) }
 
   it { is_expected.to validate_presence_of(:content) }
   it { is_expected.to validate_length_of(:content).is_at_most(200) }
-
 
   it('scope not_sell_user_messages') do
     sell_user = create(:user)
@@ -49,5 +48,42 @@ RSpec.describe Message, type: :model do
         end
       end
     end
+  end
+
+  describe('notice_path') do
+    it('messageableにnotice_pathを送信する') do
+      product = create(:product)
+      message = create(:message, messageable: product)
+      allow(product).to receive(:notice_messageable_path)
+      message.notice_path
+      expect(product).to have_received(:notice_messageable_path)
+    end
+  end
+
+  describe('notice_image') do
+    it('messageableにnotice_product_imageを送信する') do
+      product = create(:product)
+      message = create(:message, messageable: product)
+      allow(product).to receive(:notice_messageable_image)
+      message.notice_image
+      expect(product).to have_received(:notice_messageable_image)
+    end
+  end
+
+  describe('notice_body') do
+    it('messgeableにnotice_bodyを送信する') do
+      product = create(:product)
+      message = create(:message, messageable: product)
+      allow(product).to receive(:notice_messageable_body)
+      message.notice_body
+      expect(product).to have_received(:notice_messageable_body)
+    end
+  end
+
+  it('メッセージが作成されると、messageableにcreate_notice(self)を送信する') do
+    product = create(:product)
+    allow(product).to receive(:create_notice)
+    message = create(:message, messageable: product)
+    expect(product).to have_received(:create_notice).with(message)
   end
 end

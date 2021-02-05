@@ -61,7 +61,7 @@ end
 statuses = Status.all.take(2)
 categories = Category.all.take(2)
 shipping_days = ShippingDay.all.take(2)
-users = User.all.take(10)
+users = User.all.take(5)
 
 statuses.each do |status|
   categories.each do |category|
@@ -89,3 +89,22 @@ products.each do |product|
     user.likes.create!(product: product)
   end
 end
+
+# 購入
+user = User.first
+products = Product.where.not(user: user).take(3)
+products.each do |p|
+  p.update!(traded: true, purchace_user: user)
+  p.create_todo!
+end
+
+# 発送から評価まで
+todo = Todo.first
+sell_user = todo.product.sell_user
+purchace_user = user
+todo.messages.create!(user: sell_user, content: 'test')
+todo.messages.create!(user: purchace_user, content: 'test')
+todo.update!(shipped: true)
+todo.update!(received: true)
+
+todo.product.create_evaluation!(score: 1)

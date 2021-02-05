@@ -1,0 +1,14 @@
+<%= provide(:title, 'やることリスト') %>
+<h1 class="mb-3 text-center">やることリスト</h1>
+
+<div class="row">
+  <div class="col-md-8">
+    <%= render(@todos) %>
+    <% unless @todos.empty? %>
+      <div class="d-flex justify-content-center mt-3">
+        <%= will_paginate(@todos, renderer: WillPaginate::ActionView::BootstrapLinkRenderer) %>
+      </div>
+    <% end %>
+  </div>
+  <%= render('shared/menu') %>
+</div>

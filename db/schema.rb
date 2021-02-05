@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_30_011456) do
+ActiveRecord::Schema.define(version: 2021_02_03_093058) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -37,6 +37,14 @@ ActiveRecord::Schema.define(version: 2021_01_30_011456) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "evaluations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.integer "score", default: 0
+    t.bigint "product_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["product_id"], name: "index_evaluations_on_product_id"
   end
 
   create_table "likes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -90,8 +98,10 @@ ActiveRecord::Schema.define(version: 2021_01_30_011456) do
     t.bigint "category_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "purchace_user_id"
     t.index ["category_id"], name: "index_products_on_category_id"
     t.index ["name", "description"], name: "name_description_fulltext_idx", type: :fulltext
+    t.index ["purchace_user_id"], name: "index_products_on_purchace_user_id"
     t.index ["shipping_day_id"], name: "index_products_on_shipping_day_id"
     t.index ["status_id"], name: "index_products_on_status_id"
     t.index ["user_id"], name: "index_products_on_user_id"
@@ -107,6 +117,15 @@ ActiveRecord::Schema.define(version: 2021_01_30_011456) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "todos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "product_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "shipped", default: false
+    t.boolean "received", default: false
+    t.index ["product_id"], name: "index_todos_on_product_id"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -131,6 +150,7 @@ ActiveRecord::Schema.define(version: 2021_01_30_011456) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "evaluations", "products"
   add_foreign_key "likes", "products"
   add_foreign_key "likes", "users"
   add_foreign_key "messages", "users"
@@ -140,5 +160,7 @@ ActiveRecord::Schema.define(version: 2021_01_30_011456) do
   add_foreign_key "products", "shipping_days"
   add_foreign_key "products", "statuses"
   add_foreign_key "products", "users"
+  add_foreign_key "products", "users", column: "purchace_user_id"
+  add_foreign_key "todos", "products"
   add_foreign_key "users", "prefectures"
 end

@@ -7,7 +7,7 @@
   </div>
   <div class="card-body text-center">
     <h4 class="card-title"><%= @user.account_name %></h4>
-    <p class="card-text">評価：</p>
+    <p class="card-text">評価：<%= @user.average_score %></p>
     <p class="card-text">出品数：<%= @untraded_products.count %></p>
   </div>
 </div>

@@ -1,0 +1,7 @@
+<%= form_with(model: @message, url: messageable_post_url, local: true, class: 'message-form') do |f| %>
+  <h5>メッセージ（200文字以内）</h5>
+  <%= f.text_area(:content, class: 'form-control mb-3', rows: 5, 'v-on:input' => 'onInput($event)') %>
+  <p v-show="!is_longer" class="message-form-initial-empty-error-messgae"></p>
+  <p v-show="is_longer" class="message-form-error-message">200文字以内で入力して下さい。</p>
+  <%= f.submit('メッセージを送る', class: 'btn btn-primary btn-block') %>
+<% end %>

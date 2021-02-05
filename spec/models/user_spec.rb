@@ -121,24 +121,55 @@ RSpec.describe User, type: :model do
   #   end
   # end
 
-  describe('not_received_todos') do
-    it('ユーザーのtraded:true, solded: falseなtodosの配列を返す') do
-      user = create(:user)
-      sell_product = create(:purchace_product, user: user)
-      create(:purchace_product, user: user, solded: true)
-      create(:purchace_product, purchace_user: user, solded: true)
-      purchace_product = create(:purchace_product, purchace_user: user)
-      Product.all.each do |p|
-        p.create_todo
-      end
-      # 購入した商品2(solded: true, false), 出品した商品2(solded: true, false)
-      todos = user.not_received_todos
+  # describe('not_received_todos') do
+  #   it('ユーザーのtraded:true, solded: falseなtodosの配列を返す') do
+  #     user = create(:user)
+  #     sell_product = create(:purchace_product, user: user)
+  #     create(:purchace_product, user: user, solded: true)
+  #     create(:purchace_product, purchace_user: user, solded: true)
+  #     purchace_product = create(:purchace_product, purchace_user: user)
+  #     Product.all.each do |p|
+  #       p.create_todo
+  #     end
+  #     # 購入した商品2(solded: true, false), 出品した商品2(solded: true, false)
+  #     todos = user.not_received_todos
 
-      aggregate_failures do
-        expect(todos.length).to eq(2)
-        expect(todos[0].id).to eq(purchace_product.id)
-        expect(todos[1]).to eq(sell_product.id)
-      end
+  #     aggregate_failures do
+  #       expect(todos.length).to eq(2)
+  #       expect(todos[0].id).to eq(purchace_product.id)
+  #       expect(todos[1].id).to eq(sell_product.id)
+  #     end
+  #   end
+  # end
+
+  # describe('purchace_products_to_evaluate') do # solded: false && received: true
+  #   it('評価すべき商品の配列を返す') do
+  #     user = create(:user)
+  #     product_to_evaluate = create(:purchace_product, purchace_user: user, solded: false)
+  #     create(:todo, product: product_to_evaluate, received: true)
+  #     product = create(:purchace_product, purchace_user: user, solded: false)
+  #     create(:todo, product: product, received: false)
+
+  #     products = user.purchace_products_to_evaluate
+  #     aggregate_failures do
+  #       expect(products.length).to eq(1)
+  #       expect(products[0].id).to eq(product_to_evaluate.id) 
+  #     end
+  #   end
+  # end
+
+  describe('average_score') do
+    let(:user) { create(:user) }
+    let(:products_1) { create_list(:product, 3, user: user) }
+    let(:products_2) { create_list(:product, 3, user: user) }
+    let!(:evaluations_1) do
+      products_1.each { |p| create(:evaluation, product: p, score: 1) }
+    end
+    let!(:evaluations_2) do
+      products_2.each { |p| create(:evaluation, product: p, score: 2) }
+    end
+    it('評価の平均を返す') do
+      expect(user.average_score).to eq(1.5)
     end
   end
 end

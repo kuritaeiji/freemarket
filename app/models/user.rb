@@ -58,6 +58,20 @@ class User < ApplicationRecord
     todos.sort { |a, b| b.created_at <=> a.created_at }
   end
 
+  def purchace_products_to_evaluate
+    purchace_products.where(solded: false).select { |p| p.received? }
+  end
+
+  def average_score
+    evaluations = products.map { |p| p.evaluation }.compact
+    if evaluations.empty?
+      '無し'
+    else
+      sum = evaluations.sum(0) { |e| e.score }
+      (sum.to_f / evaluations.length).round(1)
+    end
+  end
+
   private
     def prepare_account_activation
       create_account_activation_token_and_digest

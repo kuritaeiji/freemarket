@@ -5,6 +5,10 @@ body {
   font-family: "游ゴシック体", "YuGothic", "游ゴシック", "Yu Gothic", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", "Meiryo", sans-serif;
 }
 
+.main {
+  min-height: calc(100vh - 240px);
+}
+
 .app-menu.searched-product {
   a:link { color : #000000; }
   a:visited { color : #000000; }

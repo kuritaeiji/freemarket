@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :evaluation do
-    association(:purchaced_product)
+    association(:product)
     score { 1 }
   end
 end

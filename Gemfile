@@ -33,6 +33,7 @@ gem('oauth2')
 gem('faker')
 gem('will_paginate')
 gem('will_paginate-bootstrap4')
+gem("aws-sdk-s3", require: false)
 
 
 group :development, :test do

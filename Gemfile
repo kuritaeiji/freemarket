@@ -34,6 +34,7 @@ gem('faker')
 gem('will_paginate')
 gem('will_paginate-bootstrap4')
 gem("aws-sdk-s3", require: false)
+gem('unicorn')
 
 
 group :development, :test do

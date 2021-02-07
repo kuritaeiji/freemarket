@@ -55,7 +55,7 @@
 
     <h5 class="my-5"><%= @product.description %></h5>
 
-    <% if current_user == @product.user || @product.traded? %>
+    <% if current_user.nil? || current_user == @product.user || @product.traded? %>
       <h5 id="like-badge">
         <span class="badge badge-secondary badge-pill">
           <i class="fa fa-heart"></i> いいね！ <%= @product.likes.count %>
@@ -85,7 +85,7 @@
 
 
     <% unless @product.traded? %>
-      <%= render('messges/message_form') %>
+      <%= render('messages/message_form') %>
     <% end %>
   </div>
 </div>

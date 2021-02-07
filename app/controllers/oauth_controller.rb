@@ -1,18 +1,18 @@
 class OauthController < ApplicationController
-  REDIRECT_URI = Rails.env.production? ? "https://#{ENV['IP_ADDRESS']}" : 'http://localhost:3000/oauth/callback'
+  REDIRECT_URI = Rails.env.production? ? "http://#{ENV['DNS_NAME']}:3000/oauth/callback" : 'http://localhost:3000/oauth/callback'
 
   def authorization
     client = OAuth2::Client.new(ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET'],
       site: 'https://accounts.google.com/', authorize_url: 'o/oauth2/auth')
     scopes = ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email']
-    redirect_to(client.auth_code.authorize_url(redirect_uri: self::REDIRECT_URI,
+    redirect_to(client.auth_code.authorize_url(redirect_uri: self.class::REDIRECT_URI,
       scope: scopes.join(' ')))
   end
 
   def callback
     token = get_token_client.auth_code.get_token(
       params[:code],
-      redirect_uri: self::REDIRECT_URI
+      redirect_uri: self.class::REDIRECT_URI
     )
 
     response = token.get('https://www.googleapis.com/oauth2/v1/userinfo')

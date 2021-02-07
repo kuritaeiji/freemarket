@@ -1,1 +1,1 @@
-Webpacker::Compiler.env["BASE_URL"] = Rails.env.development? || Rails.env.test? ? 'http://localhost:3000' : ''
+Webpacker::Compiler.env["BASE_URL"] = Rails.env.development? || Rails.env.test? ? 'http://localhost:3000' : 'https://13.114.216.241'

@@ -49,7 +49,7 @@ module TodosHelper
     end
 
     def purchace_user_body(todo)
-      if shipped?
+      if todo.shipped?
         '商品を受け取りましょう。'
       else
         '出品者とメッセージのやりとりをしましょう。'

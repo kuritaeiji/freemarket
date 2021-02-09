@@ -19,7 +19,7 @@ class Product < ApplicationRecord
     return all if search_params.select { |k, v| !v.nil? && !v.empty? }.empty?
     search_by_keywords(search_params[:keywords])
       .search_by_category(search_params[:category_id])
-      .search_by_shipping_days(search_params[:status_ids])
+      .search_by_statuses(search_params[:status_ids])
       .search_by_shipping_days(search_params[:shipping_day_ids])
       .where(traded: false)
   })
@@ -31,7 +31,7 @@ class Product < ApplicationRecord
     end
   })
   scope(:search_by_category, ->(category_id) { where(category_id: category_id) unless category_id.empty? })
-  scope(:search_by_statuses, ->(status_ids) { where(status: status_ids) unless status_ids.empty? })
+  scope(:search_by_statuses, ->(status_ids) { where(status_id: status_ids) unless status_ids.empty? })
   scope(:search_by_shipping_days, ->(day_ids) { where(shipping_day_id: day_ids) unless day_ids.empty? })
 
   validates(:name, presence: true, length: { maximum: 50 })
